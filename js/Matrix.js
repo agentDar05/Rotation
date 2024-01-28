@@ -6,7 +6,7 @@ class Matrix {
   add(a) {
     const translated = [];
     for (let i = 0; i < this.vectors.length; i++) {
-      translated.push(this.vectors.asArray[i].add(a));
+      translated.push(this.vectors.asArray()[i].add(a));
     }
     return new Matrix(translated);
   }
@@ -24,4 +24,14 @@ class Matrix {
     }
     return result;
   }
+  //   multiplyByVector(vector) {
+  //     let array = [];
+  //     for (let i = 0; i < this.vectors.length; i++) {
+  //       const mVector = this.vectors[i];
+  //       for (let a = 0; i < vector.asArray().length; a++) {
+  //         array.push(this.vectors[i].timesVector(vector));
+  //       }
+  //     }
+  //     return new Matrix([array]);
+  //   }
 }

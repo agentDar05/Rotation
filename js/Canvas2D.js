@@ -47,6 +47,27 @@ class Canvas2D {
     this.context.fill();
     this.context.fillStyle = "black";
   }
+  setAlpha(alpha) {
+        this.context.globalAlpha = alpha;
+  }
+  /**
+   * 
+   * @param {number[][]} coords - e.g. [[0,0], [0,50], [50,50], [50,0], [0,0]]
+   * @param {string} color 
+   */
+  drawFilledPath(coords, color) {
+    this.context.beginPath();
+    const startPoint = coords[0];
+    this.context.moveTo(startPoint[0], startPoint[1]);
+    for (let index = 1; index < coords.length; index++) {
+      const nextPoint = coords[index];
+          this.context.lineTo(nextPoint[0], nextPoint[1]);
+    }
+    this.context.fillStyle = color;
+    this.context.fill();
+    this.context.fillStyle = "black";
+    
+  }
 
   /**
    * x1, y1 - start point; x2, y2 - end point
@@ -63,6 +84,7 @@ class Canvas2D {
     this.context.strokeStyle = stroke;
     this.context.stroke();
   }
+  
 
   /**
    * ax, ay - first point; bx, by - second point; cx, cy - third point
@@ -110,4 +132,3 @@ class Canvas2D {
                 </div>`;
   }
 }
-console.log("2D loaded");

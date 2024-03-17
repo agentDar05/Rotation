@@ -1,4 +1,20 @@
+import Matrix from "./Matrix.js";
+import Canvas2D from "./Canvas2D.js";
+import Vector from "./Vector.js";
+
+let angleDeg = 0;
+let number = 1;
+const canvasHeight = 300;
+const canvasWidth = 300;
+const speedButton = document.querySelector(".spdup");
+const slowButton = document.querySelector(".slwdn");
+const canvas = new Canvas2D(document.querySelector(".canvas-container"), {
+  width: canvasWidth,
+  height: canvasHeight,
+});
+
 function drawLine(drawCanvas, v1, v2) {
+  // console.log(drawCanvas, v1, v2);
   drawCanvas.drawLine(
     v1.asArray()[0],
     v1.asArray()[1],
@@ -6,11 +22,24 @@ function drawLine(drawCanvas, v1, v2) {
     v2.asArray()[1]
   );
 }
+const matrix = new Matrix([
+  new Vector([0, 0, 0]),
+  new Vector([0, 50, 0]),
+  new Vector([50, 50, 0]),
+  new Vector([50, 0, 0]),
+  new Vector([0, 0, 0]),
+  new Vector([0, 0, 50]),
+  new Vector([0, 50, 50]),
+  new Vector([50, 50, 50]),
+  new Vector([50, 0, 50]),
+  new Vector([0, 0, 50]),
+]);
+
 const a1 = new Vector([1, 0, 0]);
 const a2 = new Vector([0, 1, 0]);
 const STOP = {};
 
-const house = [
+const house = new Matrix([
   // front
   new Vector([0, 0, 0]),
   new Vector([50, 0, 0]),
@@ -62,7 +91,7 @@ const house = [
   new Vector([25, 70, 50]),
   new Vector([25, 70, 0]),
   STOP,
-];
+]);
 
 /**
  *
@@ -83,7 +112,7 @@ function convertVectorsToCoords(arrayOfVectors) {
 
 function fillFigure(figure, color) {
   const partedFigure = arrayToParts(figure);
-  console.log(partedFigure);
+  // console.log(partedFigure);
   for (let i = 0; i < partedFigure.length; i++) {
     fillRect(partedFigure[i], color);
   }
@@ -137,13 +166,15 @@ function degreesToRadians(degree) {
   return (degree * Math.PI) / 180;
 }
 function drawLines(canvas, figure) {
+  // console.log(canvas, figure);
   const array = [];
-  for (let i = 0; i < figure.length; i++) {
-    const curr = figure[i];
-    const next = figure[i + 1];
+  const vectors = figure.asArray();
+  for (let i = 0; i < vectors.length; i++) {
+    const curr = vectors[i];
+    const next = vectors[i + 1];
     if (curr instanceof Vector && next instanceof Vector) {
       drawLine(canvas, curr, next);
-      array.push(figure[i].asArray());
+      array.push(vectors[i].asArray());
     }
   }
 }
@@ -231,7 +262,7 @@ function rotatedX(figure, angle) {
 }
 function moveFigure(figure, center) {
   if (!center || !figure)
-    throw new Error("All params are required: " + figure+ ", " + center)    
+    throw new Error("All params are required: " + figure + ", " + center);
   let output = [];
   for (let i = 0; i < figure.length; i++) {
     if (figure[i] instanceof Vector) {
@@ -269,7 +300,7 @@ function rotateVectors(vectors, angleX, angleY, angleZ) {
       newVectors.push(newVector);
     } else newVectors.push({});
   }
-  
+
   // console.log(newVectors);
   return newVectors;
 }
@@ -286,19 +317,11 @@ function changeBasis(v) {
     v.asArray()[2],
   ]);
 }
-let angleDeg = 0;
-let number = 1;
-const canvasHeight = 300;
-const canvasWidth = 300;
-const speedButton = document.querySelector(".spdup");
-const slowButton = document.querySelector(".slwdn");
-const canvas = new Canvas2D(document.querySelector(".canvas-container"), {
-  width: canvasWidth,
-  height: canvasHeight,
-});
+
 speedButton.addEventListener("click", function () {
   number++;
 });
+drawLines(canvas, matrix);
 slowButton.addEventListener("click", function () {
   if (!number == 0) {
     number--;
@@ -320,20 +343,38 @@ function drawFigure() {
   angleDeg += number;
   canvas.clear();
   const center = new Vector([25, 25, 0]);
-  const rotatedHouse = moveFigure(rotateVectors(moveFigure(house, center), 20, 0, 0), center.times(-1));
-  // const rotatedHouse = 
-  //   moveFigure(
-  //     rotateVectors(moveFigure(rotateHouse, center), angleDeg, angleDeg, angleDeg),
-  //     center.times(-1)
-  //   );
-  // console.log(
-  //   rotateVectors(moveFigure(rotateHouse, center), angleDeg, angleDeg, angleDeg));
+  const rotatedHouse = moveFigure(
+    rotateVectors(moveFigure(house, center), 20, 0, 0),
+    center.times(-1)
+  );
+  const rotateHouse = moveFigure(
+    rotateVectors(
+      moveFigure(rotatedHouse, center),
+      angleDeg,
+      angleDeg,
+      angleDeg
+    ),
+    center.times(-1)
+  );
+  console.log(
+    rotateVectors(moveFigure(rotateHouse, center), angleDeg, angleDeg, angleDeg)
+  );
   drawLines(canvas, changeBases(rotatedHouse));
   canvas.setAlpha(0.4);
 
   requestAnimationFrame(drawFigure);
 }
-drawFigure();
+const a = new Vector([1, -1, 1])
+const b = new Vector([0, 1, 3])
+const c = new Vector([-1, 2, -4]);
+const matrix1 = new Matrix([
+  new Vector([5, 3, 6]),
+  new Vector([3, 8, 7]),
+  new Vector([9, 5, 2]),
+  new Vector([1, 0, 0]),
+]);
+// console.log(matrix1.size())
+// drawFigure();
 const figure = [
   new Vector([0, 0, 0]),
   new Vector([1, 0, 0]),

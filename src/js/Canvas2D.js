@@ -1,4 +1,4 @@
-class Canvas2D {
+export default class Canvas2D {
   constructor(parentElement, { width = 150, height = 150 } = {}) {
     this.root = this.#createCanvas(parentElement, { width, height });
     this.size = { width, height };
@@ -48,12 +48,12 @@ class Canvas2D {
     this.context.fillStyle = "black";
   }
   setAlpha(alpha) {
-        this.context.globalAlpha = alpha;
+    this.context.globalAlpha = alpha;
   }
   /**
-   * 
+   *
    * @param {number[][]} coords - e.g. [[0,0], [0,50], [50,50], [50,0], [0,0]]
-   * @param {string} color 
+   * @param {string} color
    */
   drawFilledPath(coords, color) {
     this.context.beginPath();
@@ -61,12 +61,11 @@ class Canvas2D {
     this.context.moveTo(startPoint[0], startPoint[1]);
     for (let index = 1; index < coords.length; index++) {
       const nextPoint = coords[index];
-          this.context.lineTo(nextPoint[0], nextPoint[1]);
+      this.context.lineTo(nextPoint[0], nextPoint[1]);
     }
     this.context.fillStyle = color;
     this.context.fill();
     this.context.fillStyle = "black";
-    
   }
 
   /**
@@ -78,13 +77,13 @@ class Canvas2D {
    * @param stroke - line color
    */
   drawLine(x1, y1, x2, y2, stroke = "black") {
+    // console.log(x1, y1, x2, y2, stroke);
     this.context.beginPath();
     this.context.moveTo(x1, y1);
     this.context.lineTo(x2, y2);
     this.context.strokeStyle = stroke;
     this.context.stroke();
   }
-  
 
   /**
    * ax, ay - first point; bx, by - second point; cx, cy - third point

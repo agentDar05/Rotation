@@ -1,18 +1,35 @@
 import { log } from "node:console";
 import Vector from "./Vector.js";
+
 export default class Matrix {
   vectors;
-  constructor(vectors) {
-    this.vectors = vectors;
+
+  constructor(cols) {
+    if(!cols || !Array.isArray(cols))
+      throw new Error("The Matrix must be initialized with vectors, but got: " + cols);
+    this.vectors = cols;
   }
   /**
    *
-   * @param {Vector[]} cols
+   * @param {Vector[]} rows
    * @returns {Matrix}
    */
-  static fromRows(vectors) {
-    const cols = new Matrix(vectors);
+  static fromRows(rows) {
+    const cols = new Matrix(rows);
     return cols.transpose();
+  }
+
+  /**
+   *
+   * @param {number[][]} rows
+   * returns {Matrix}
+   */
+  static fromRowsArray(rows) {
+    const rowVectors = [];
+    for (let row of rows) {
+      rowVectors.push(new Vector(row));
+    }
+    return Matrix.fromRows(rowVectors);
   }
   addVector(v) {
     const translated = [];
@@ -73,16 +90,23 @@ export default class Matrix {
     }
     return new Matrix(rows);
   }
-  dimensions() {
-    return [this.vectors[0].dimensions, this.vectors.length];
+  get dimensions() {
+    return [this.width, this.height];
+  }
+  get dimensionsString() {
+    return this.width + "x" + this.height;
   }
   get height() {
+    if(this.vectors.length === 0)
+      return 0;
     return this.vectors[0].dimensions;
   }
   get width() {
     return this.vectors.length;
   }
   multiplyOnVector(vector) {
+    if(!vector || vector.constructor.name !== "Vector")
+      throw new Error("Vector was expected, got: " + vector);
     if (this.canMultiplyByVector(vector)) {
       const matrix = this.transpose();
       let outputVector = [];
@@ -95,14 +119,20 @@ export default class Matrix {
         `matrix and vector have incompatible dimensions: ${this.height}x${this.width} and ${vector.dimensions}`
       );
   }
-  multiplyByMatrix(matrix) {
-    const newMatrix = matrix.transpose();
-    const matrixArray = newMatrix.asArray();
+
+  /**
+   *
+   * @param {Matrix} that
+   * @returns {Matrix}
+   */
+  multiplyByMatrix(that) {
+    if(this.width !== that.height)
+      throw new Error(`Incompatible matrix dimensions: ${this.dimensionsString} and ${that.dimensionsString}`)
     let array = [];
-    const output = new Matrix(array);
-    for (let i = 0; i < newMatrix.width; i++) {
-      array.push(this.multiplyOnVector(matrixArray[i]));
+    let thatArray = that.asArray();
+    for (let i = 0; i < that.width; i++) {
+      array.push(this.multiplyOnVector(thatArray[i]));
     }
-    return output;
+    return new Matrix(array);
   }
 }

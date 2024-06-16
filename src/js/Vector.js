@@ -1,3 +1,6 @@
+import Matrix from "./Matrix.js";
+import StaticMath from "./StaticMath.js";
+
 export default class Vector {
   numbers;
   constructor(numbers) {
@@ -18,15 +21,7 @@ export default class Vector {
   get dimensions() {
     return this.numbers.length;
   }
-  /**
-   *
-   * @param {Vector} b
-   */
-  projection(b) {
-    let projection = 0;
-    console.log();
-    return b.times(projection);
-  }
+
   times(numberOfTimes) {
     const output = [];
     for (let i = 0; i < this.numbers.length; i++) {
@@ -34,7 +29,34 @@ export default class Vector {
     }
     return new Vector(output);
   }
+  /**
+   * @param {Vector} b
+   */
+  projection(b) {
+    const square = b.dot(b);
+    const dotProduct = this.dot(b);
+    return {
+      dot: dotProduct,
+      square: square,
+      result: b.times(dotProduct / square),
+    };
+  }
   
+  rotation(angleInDegrees) {
+    const angleInRadians = StaticMath.degreesToRadians(angleInDegrees);
+    const cos = Math.cos(angleInRadians);
+    const sin = Math.sin(angleInRadians);
+    const matrix = Matrix.fromRowsArray([
+      [cos, -sin],
+      [sin, cos],
+    ]);
+
+    const vector = new Vector(this.numbers);
+    return matrix.multiplyOnVector(vector);
+  }
+  toString() {
+    return 'Vector ' + this.numbers
+  }
   dot(secondVector) {
     if (this.dimensions !== secondVector.dimensions)
       throw new Error("Vectors must have the same size");
@@ -114,3 +136,5 @@ export default class Vector {
     return Math.sqrt(sum);
   }
 }
+
+

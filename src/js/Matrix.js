@@ -1,4 +1,3 @@
-import { log } from "node:console";
 import Vector from "./Vector.js";
 
 export default class Matrix {
@@ -11,7 +10,7 @@ export default class Matrix {
   }
   /**
    *
-   * @param {Vector[]} rows
+   * @param {Vector[]} rows3
    * @returns {Matrix}
    */
   static fromRows(rows) {
@@ -95,6 +94,17 @@ export default class Matrix {
   }
   get dimensionsString() {
     return this.width + "x" + this.height;
+  }
+  /**
+   * 
+   * @param {number} colIndex 
+   * @returns {Vector}
+   */
+  getCol(colIndex) {
+    if (colIndex >= this.width || colIndex<0) 
+      throw new Error(`Column index ${colIndex} is out of bounds, matrix has ${this.width} columns`)
+      
+    return this.vectors[colIndex];
   }
   get height() {
     if(this.vectors.length === 0)

@@ -1,6 +1,7 @@
 import Matrix from "./Matrix.js";
 import Canvas2D from "./Canvas2D.js";
 import Vector from "./Vector.js";
+import StaticMath from "./StaticMath.js";
 
 let angleDeg = 0;
 let number = 1;
@@ -162,11 +163,8 @@ function areArraysEqual(arr1, arr2) {
   return true;
 }
 
-function degreesToRadians(degree) {
-  return (degree * Math.PI) / 180;
-}
+
 function drawLines(canvas, figure) {
-  // console.log(canvas, figure);
   const array = [];
   const vectors = figure.asArray();
   for (let i = 0; i < vectors.length; i++) {
@@ -317,20 +315,6 @@ function changeBasis(v) {
     v.asArray()[2],
   ]);
 }
-
-speedButton.addEventListener("click", function () {
-  number++;
-});
-drawLines(canvas, matrix);
-slowButton.addEventListener("click", function () {
-  if (!number == 0) {
-    number--;
-  } else {
-    // throw new Error("this is the minimum speed");
-    alert("this is the minimum speed");
-  }
-});
-
 function changeBases(arrayOfVectors) {
   const newArray = [];
   for (const v of arrayOfVectors) {
@@ -356,9 +340,7 @@ function drawFigure() {
     ),
     center.times(-1)
   );
-  console.log(
-    rotateVectors(moveFigure(rotateHouse, center), angleDeg, angleDeg, angleDeg)
-  );
+  
   drawLines(canvas, changeBases(rotatedHouse));
   canvas.setAlpha(0.4);
 

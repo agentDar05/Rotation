@@ -1,45 +1,32 @@
-.puck {
-    position: relative;
-    border: 1px solid rgba(0, 0, 0, 0.6);
-    border-radius: 50%;
+.rotate {
+  background-color: aqua;
+  width: 50px;
+  height: 50px;
+  margin-left: 50px;
+  margin-top: 50px;
+  position: relative;
+  animation: move 2s infinite alternate;
+}
+@keyframes move {
+  0% {
+    transform: matrix(1, 0, 0, 1, 0, 0);
+  }
+  100% {
+    transform: matrix(0, 1, 0, 1, 0, 0);
+  }
 }
 
-.puck__cell {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: none;
-    background-color: white;
-    opacity: .6;
-    cursor: pointer;
+.btn {
+  animation: shake 0.4s 4 alternate;
 }
-.puck__cell--no-status {
-    background-color: rgb(6, 95, 212);
-    color: white;
-}
-.puck__cell--status-success {
-    background-color: #299447;
-    color: white;
-}
-.puck__cell--status-failed {
-    background-color: #cb2f4b;
-    color: white;
-}
-
-.puck__cell--disabled {
-    background-color:white;
-    color: #bbbbbb;
-    border: 1px solid #bbbbbb;
-}
-.puck__cell--selected {
-    opacity: 1;
-    box-shadow: 0 4px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%)
-}
-
-.puck__cell:hover {
-    opacity: 0.9;
-}
-.puck__cell:active {
-    opacity: 1;
+@keyframes shake {
+  0% {
+    rotate: 0deg;
+  }
+  50% {
+    rotate: 7deg;
+  }
+  100% {
+    rotate: -7deg;
+  }
 }

@@ -21,7 +21,9 @@ export default class Vector {
   get dimensions() {
     return this.numbers.length;
   }
-
+  get(idx) {
+    return this.numbers[idx]
+  }
   times(numberOfTimes) {
     const output = [];
     for (let i = 0; i < this.numbers.length; i++) {
@@ -121,6 +123,11 @@ export default class Vector {
     }
     return new Vector(output);
   }
+  /**
+   * 
+   * @param {Vector} subtrahend 
+   * @returns {Vector}
+   */
   subtract(subtrahend) {
     if (subtrahend instanceof Vector) return this.add(subtrahend.times(-1));
     else return this.numbers;

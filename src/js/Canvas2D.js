@@ -55,7 +55,7 @@ export default class Canvas2D {
    * @param {number[][]} coords - e.g. [[0,0], [0,50], [50,50], [50,0], [0,0]]
    * @param {string} color
    */
-  drawFilledPath(coords, color) {
+  drawFilledPath(coords, color = "black") {
     this.context.beginPath();
     const startPoint = coords[0];
     this.context.moveTo(startPoint[0], startPoint[1]);

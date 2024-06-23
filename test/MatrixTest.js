@@ -1,6 +1,7 @@
 import assert from "assert";
 import Matrix from "../src/js/Matrix.js";
 import Vector from "../src/js/Vector.js";
+import StaticMath from "../src/js/StaticMath.js";
 import { it } from "node:test";
 import { describe } from "mocha";
 
@@ -88,6 +89,19 @@ describe("#dimensions", () => {
     assert.deepStrictEqual(matrix.dimensions, expected);
     assert.deepStrictEqual(matrix1.dimensions, expected1);
   });
+  describe("#subtractVector", () => {
+    it("subtracts a vector from a matrix", () => {
+      const m = new Matrix([
+        new Vector([1, 0, -1]),
+        new Vector([2, 1, -2]),
+        new Vector([3, 0, -3]),
+      ]);
+      const v = new Vector([1, 0, 0])
+      const expected = 
+      console.log(m.subtractVector(v).toString())
+      // StaticMath.assertMatrixEqual(m.subtractVector(v), )
+    })
+  })
   describe("transpose", () => {
     it("returns empty matrix if called on an empty matrix", () => {
       assert.deepStrictEqual(new Matrix([]), new Matrix([]).transpose());

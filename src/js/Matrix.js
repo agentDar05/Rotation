@@ -40,6 +40,18 @@ export default class Matrix {
   asArray() {
     return this.vectors;
   }
+  /**
+   * 
+   * @param {Vector} vector
+   * @returns {Vector} 
+   */
+  subtractVector(vector) {
+    const arr = [];
+    for (let i = 0; i < this.vectors.length; i++) {
+        arr.push(this.getCol(i).subtract(vector))     
+    }
+    return new Matrix(arr)
+  }
   toString() {
     let output = "";
     for (let a = 0; a < this.height; a++) {

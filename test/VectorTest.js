@@ -1,43 +1,28 @@
 import assert from "assert";
 import Vector from "../src/js/Vector.js";
 import { it } from "node:test";
-import Matrix from "../src/js/Matrix.js";
 import StaticMath from "../src/js/StaticMath.js";
+import AssertUtils from "../src/js/AssertUtils.js";
 describe("Vector", () => {
-  describe("#add", () => {
-    it("adds two vectors", () => {
-      const a = new Vector([1,0,1]);
-      const b = new Vector([0,2,0]);
-      const expected = new Vector([1, 2, 1]);
-      assert.deepStrictEqual(a.add(b).asArray(), expected.asArray());
+  describe("dimensions", () => {
+    it("returns dimensions of vector", () => {
+      const expected = 5;
+      const exact = new Vector([5, 0, 1, 6, 2]).dimensions;
+      assert.deepStrictEqual(exact, expected);
     });
   });
-  describe("#projection", () => {
-    it("squares vector b", () => {
-      const a = new Vector([2, 3])
-      const b = new Vector([2, 1]);
-      assert.deepStrictEqual(a.projection(b).square, 5);
-    })
+  describe("#negate", () => {
+    it("negates vector components", () => {
+      const actual = new Vector([5, 0, -1]);
+      const expected = new Vector([-5, 0, 1]);
+      AssertUtils.assertVectorsEqual(actual.negate(), expected);
+    });
+  });
+  describe("#projectOn", () => {
     it("returns projection", () => {
-      const a = new Vector([-1, -15]);// 2 3
-      const b = new Vector([10, 0]);// 2 1
-      console.log(a.projection(b));
-      // assert.deepStrictEqual(a.projection(b).result, new Vector([2.8, 1.4]));
-    });
-    it("returns  dot product", () => {
-      const a = new Vector([2, 3]);
-      const b = new Vector([2, 0]);
-      assert.deepStrictEqual(a.projection(b).dot, a.dot(b));
-    });
-  })
-  describe("#vectorToArrayOfStrings", () => {
-    it("returns vector in stroke", () => {
-      const vector = new Vector([1, 2, 3]);
-      assert.deepStrictEqual(vector.vectorToArrayOfStrings(), [
-        "1",
-        "2",
-        "3",
-      ]);
+      const a = new Vector([2, 3]); // 2 3
+      const b = new Vector([2, 1]); // 2 1
+      assert.deepStrictEqual(a.projectOn(b), new Vector([2.8, 1.4]));
     });
   });
   describe("#dot", () => {
@@ -72,29 +57,30 @@ describe("Vector", () => {
       assert.strictEqual(a.dot(b), 0);
     });
   });
-  describe("dimensions", () => {
-    it("returns dimensions of vector", () => {
-      const expected = 5;
-      const exact = new Vector([5, 0, 1, 6, 2]).dimensions;
-      assert.deepStrictEqual(exact, expected);
+  describe("#vectorToArrayOfStrings", () => {
+    it("returns vector in stroke", () => {
+      const vector = new Vector([1, 2, 3]);
+      assert.deepStrictEqual(vector.vectorToArrayOfStrings(), ["1", "2", "3"]);
     });
   });
-  describe("#canMultiplyOnVector", () => {
-    it("returns true if m and v are of compatible dimensions", () => {
-      const a = new Matrix([
-        new Vector([1, 1, 1]),
-        new Vector([2, 3, 5]),
-        new Vector([2, 3, 5]),
-      ]);
-      const b = new Vector([0, 1, 0]);
-      assert.ok(a.canMultiplyByVector(b));
-    });
-    it("returns false if m and v are not of compatible dimensions", () => {
-      const a = new Matrix([new Vector([1, 1, 1]), new Vector([2, 3, 5])]);
-      const b = new Vector([0, 1, 0]);
-      assert.ok(a.canMultiplyByVector(b) === false);
+  describe("#add", () => {
+    it("adds two vectors", () => {
+      const a = new Vector([1, 0, 1]);
+      const b = new Vector([0, 2, 0]);
+      const expected = new Vector([1, 2, 1]);
+      assert.deepStrictEqual(a.add(b).asArray(), expected.asArray());
     });
   });
-  
+  describe("projectOnYZ", () => {
+    it("projects the vector on plane yz", () => {
+      const v = new Vector([1, 2, 3]);
+      const v1 = new Vector([0, 2, 0]);
+      AssertUtils.assertVectorsEqual(v.projectOnYZ(), new Vector([0, 2, 3]));
+      AssertUtils.assertVectorsEqual(v1.projectOnYZ(), new Vector([0, 2, 0]));
+    });
+    it("returns empty vector if vector is empty", () => {
+      const v = new Vector([]);
+      AssertUtils.assertVectorsEqual(v.projectOnYZ(), new Vector([]));
+    });
+  });
 });
-

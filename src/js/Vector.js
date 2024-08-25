@@ -8,11 +8,15 @@ export default class Vector {
       throw new Error(
         "Must pass an array to class Vector. Currently: " + numbers
       );
+    const copy = [];
+
     for (let i = 0; i < numbers.length; i++) {
       if (typeof numbers[i] !== "number")
         throw new Error("Must pass an array of numbers. Currently: " + numbers);
+      if (numbers[i] === -0) copy.push(0);
+      else copy.push(numbers[i]);
     }
-    this.numbers = numbers;
+    this.numbers = copy;
   }
   /**
    *
@@ -22,7 +26,7 @@ export default class Vector {
     return this.numbers.length;
   }
   get(idx) {
-    return this.numbers[idx]
+    return this.numbers[idx];
   }
   times(numberOfTimes) {
     const output = [];
@@ -31,19 +35,18 @@ export default class Vector {
     }
     return new Vector(output);
   }
+  negate() {
+    return this.times(-1);
+  }
   /**
    * @param {Vector} b
    */
-  projection(b) {
+  projectOn(b) {
     const square = b.dot(b);
     const dotProduct = this.dot(b);
-    return {
-      dot: dotProduct,
-      square: square,
-      result: b.times(dotProduct / square),
-    };
+    return b.times(dotProduct / square);
   }
-  
+
   rotation(angleInDegrees) {
     const angleInRadians = StaticMath.degreesToRadians(angleInDegrees);
     const cos = Math.cos(angleInRadians);
@@ -57,7 +60,7 @@ export default class Vector {
     return matrix.multiplyOnVector(vector);
   }
   toString() {
-    return 'Vector ' + this.numbers
+    return "Vector " + this.numbers;
   }
   dot(secondVector) {
     if (this.dimensions !== secondVector.dimensions)
@@ -124,8 +127,8 @@ export default class Vector {
     return new Vector(output);
   }
   /**
-   * 
-   * @param {Vector} subtrahend 
+   *
+   * @param {Vector} subtrahend
    * @returns {Vector}
    */
   subtract(subtrahend) {
@@ -135,6 +138,7 @@ export default class Vector {
   asArray() {
     return this.numbers;
   }
+
   length() {
     let sum = 0;
     for (const curr of this.numbers) {
@@ -142,6 +146,10 @@ export default class Vector {
     }
     return Math.sqrt(sum);
   }
+  projectOnYZ() {
+    const clone = new Vector(this.numbers)
+    if (clone[0])
+    clone[0]  = 0
+    return clone
+  }
 }
-
-

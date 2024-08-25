@@ -1,9 +1,22 @@
 import Vector from "./Vector.js";
 import Matrix from "./Matrix.js";
 export default class StaticMath {
+  /**
+   *
+   * @param {number} degree
+   * @returns {number}
+   */
   static degreesToRadians(degree) {
     return (degree * Math.PI) / 180;
   }
+  static radiansToDegrees(radians) {
+    return (radians * 180) / Math.PI;
+  }
+  /**
+   *
+   * @param {number} angleXRad
+   * @returns {Matrix}
+   */
   static returnXMatrix(angleXRad) {
     const cos = Math.cos(angleXRad);
     const sin = Math.sin(angleXRad);
@@ -13,21 +26,11 @@ export default class StaticMath {
       [0, sin, cos],
     ]);
   }
-  static returnYMatrix(angleYRad) {
-    return Matrix.fromRowsArray([
-      [Math.cos(angleYRad), 0, Math.sin(angleYRad)],
-      [0, 1, 0],
-      [-Math.sin(angleYRad), 0, Math.cos(angleYRad)],
-    ]);
-  }
-  static rotationMatrix(angleXInRad, angleYInRad, angleZInRad) {
-    const matrixX = StaticMath.returnXMatrix(angleXInRad);
-    const matrixY = StaticMath.returnYMatrix(angleYInRad);
-    const matrixZ = StaticMath.returnZMatrix(angleZInRad);
-
-    const matrix = matrixZ.multiplyByMatrix(matrixX.multiplyByMatrix(matrixY));
-    return matrix;
-  }
+  /**
+   *
+   * @param {number} angleXRad
+   * @returns {Matrix}
+   */
   static returnZMatrix(angleZRad) {
     return Matrix.fromRowsArray([
       [Math.cos(angleZRad), -Math.sin(angleZRad), 0],
@@ -37,21 +40,89 @@ export default class StaticMath {
   }
   /**
    *
+   * @param {number} angleXRad
+   * @returns {Matrix}
+   */
+  static returnYMatrix(angleYRad) {
+    return Matrix.fromRowsArray([
+      [Math.cos(angleYRad), 0, Math.sin(angleYRad)],
+      [0, 1, 0],
+      [-Math.sin(angleYRad), 0, Math.cos(angleYRad)],
+    ]);
+  }
+  /**
+   *
+   * @param {Vector} vector
+   * @returns {number}
+   */
+  static angleToPlaneXZ(vector) {
+    const normalVector = new Vector([0, vector.get(1), 0]);
+    const cos =
+      vector.dot(normalVector) / vector.length() / normalVector.length();
+
+    return Math.PI / 2 - Math.acos(cos);
+  }
+  static angleToPlaneYZ(vector) {
+    const normalVector = new Vector([vector.get(0), 0, 0]);
+    const cos =
+      vector.dot(normalVector) / vector.length() / normalVector.length();
+
+    return Math.PI / 2 - Math.acos(cos);
+  }
+  /**
+   *
+   * @param {Vector} vector
+   * @returns {number}
+   */
+  static angleToPlaneXY(vector) {
+    const normalVector = new Vector([0, 0, vector.get(2)]);
+    const cos =
+      vector.dot(normalVector) / vector.length() / normalVector.length();
+
+    return Math.PI / 2 - Math.acos(cos);
+  }
+  /**
+   *
+   * @param {Vector} vector
+   * @param {Vector} secondVector
+   * @returns {number} in radians
+   */
+  static returnAngleBetweenVectors(vector, secondVector) {
+    const cos =
+      vector.dot(secondVector) / vector.length() / secondVector.length();
+    return Math.acos(cos);
+  }
+
+  /**
+   *
+   * @param {Vector} vector
+   *
+   */
+  static calcAngles(vector) {
+    return {
+      xz: this.angleToPlaneXZ(vector),
+      yz: this.angleToPlaneYZ(vector),
+      xy: this.angleToPlaneXY(vector),
+    };
+  }
+
+  static rotationMatrix(angleXInRad, angleYInRad, angleZInRad) {
+    const matrixX = StaticMath.returnXMatrix(angleXInRad);
+    const matrixY = StaticMath.returnYMatrix(angleYInRad);
+    const matrixZ = StaticMath.returnZMatrix(angleZInRad);
+
+    const matrix = matrixZ.multiplyByMatrix(matrixX.multiplyByMatrix(matrixY));
+    return matrix;
+  }
+
+  /**
+   *
    * @param {Vector} v1
    * @param {Vector} v2
    * @param {number} epsilon acceptable difference between 2 components of the Vectors
    * @returns
    */
-  static assertVectorsEqual(v1, v2, epsilon) {
-    if (v1.dimensions !== v2.dimensions)
-      throw new Error("Vectors must have the same dimensions");
-    for (let i = 0; i < v1.dimensions; i++) {
-      if (Math.abs(v1.asArray()[i] - v2.asArray()[i]) >= epsilon)
-        throw new Error(
-          `Vectors aren't equal, vector 1: ${v1.asArray()}, vector 2: ${v2.asArray()}`
-        );
-    }
-  }
+
   static isVectorsEqual(v1, v2, epsilon) {
     if (v1.dimensions !== v2.dimensions) {
       throw new Error(
@@ -68,30 +139,5 @@ export default class StaticMath {
     if (arr1.length !== arr2.length) return false;
     for (let i = 0; i < arr1.length; i++) if (arr1[i] !== arr2[i]) return false;
     return true;
-  }
-  /**
-   *
-   * @param {Matrix} actual
-   * @param {Matrix} expected
-   * @param {number} epsilon
-   */
-  static assertMatrixEqual(actual, expected, epsilon = 1e-6) {
-    if (typeof epsilon !== "number" || isNaN(epsilon) || !isFinite(epsilon))
-      throw new Error(
-        `Epsilon is not a number, actual: ${epsilon}, is number:${
-          typeof epsilon === "number"
-        }, is NaN: ${isNaN(epsilon)}, isFinite:${isFinite(epsilon)}`
-      );
-    if (!this.areArraysEqual(actual.dimensions, expected.dimensions))
-      throw new Error(
-        `Dimensions of matrices aren't the same: ${actual.dimensions}, ${expected.dimensions}`
-      );
-    for (let i = 0; i < actual.width; i++) {
-      if (!this.isVectorsEqual(actual.getCol(i), expected.getCol(i), epsilon)) {
-        throw new Error(
-          `Matrices aren't equal in ${i} column. Actual: ${actual}, expected: ${expected}`
-        );
-      }
-    }
   }
 }

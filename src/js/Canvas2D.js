@@ -106,7 +106,7 @@ export default class Canvas2D {
   }
   drawText(x, y, text, stroke = "black") {
     this.context.textAlign = "center";
-    this.context.fillText(text, x, y);
+    this.context.fillText(text, x, y,100);
   }
 
   clear() {

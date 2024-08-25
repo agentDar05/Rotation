@@ -4,13 +4,15 @@ export default class Matrix {
   vectors;
 
   constructor(cols) {
-    if(!cols || !Array.isArray(cols))
-      throw new Error("The Matrix must be initialized with vectors, but got: " + cols);
+    if (!cols || !Array.isArray(cols))
+      throw new Error(
+        "The Matrix must be initialized with vectors, but got: " + cols
+      );
     this.vectors = cols;
   }
   /**
    *
-   * @param {Vector[]} rows3
+   * @param {Vector[]} rows
    * @returns {Matrix}
    */
   static fromRows(rows) {
@@ -21,7 +23,7 @@ export default class Matrix {
   /**
    *
    * @param {number[][]} rows
-   * returns {Matrix}
+   * @returns {Matrix}
    */
   static fromRowsArray(rows) {
     const rowVectors = [];
@@ -30,6 +32,11 @@ export default class Matrix {
     }
     return Matrix.fromRows(rowVectors);
   }
+  /**
+   * 
+   * @param {Vector} v 
+   * @returns {Matrix}
+   */
   addVector(v) {
     const translated = [];
     for (let i = 0; i < this.vectors.length; i++) {
@@ -37,21 +44,29 @@ export default class Matrix {
     }
     return new Matrix(translated);
   }
+  /**
+   * 
+   * @returns {Vector[]}
+   */
   asArray() {
     return this.vectors;
   }
   /**
-   * 
+   *
    * @param {Vector} vector
-   * @returns {Vector} 
+   * @returns {Vector}
    */
   subtractVector(vector) {
     const arr = [];
     for (let i = 0; i < this.vectors.length; i++) {
-        arr.push(this.getCol(i).subtract(vector))     
+      arr.push(this.getCol(i).subtract(vector));
     }
-    return new Matrix(arr)
+    return new Matrix(arr);
   }
+  /**
+   * 
+   * @returns {string}
+   */
   toString() {
     let output = "";
     for (let a = 0; a < this.height; a++) {
@@ -59,35 +74,20 @@ export default class Matrix {
       for (let i = 0; i < this.width; i++) {
         row = row + this.vectors[i].vectorToArrayOfStrings()[a] + " ";
       }
-      // console.log(row)
+
       output = output + row + "\n";
     }
 
     return output.substring(0, output.length - 1);
   }
-  // asNumbers() {
-  //   let result = "";
-  //   for (let i = 0; i < this.vectors.length; i++) {
-  //     const currVector = this.vectors[i]
-  //     for (let a = 0; a < currVector.asArray(); a++){
-  //       result = result + currVector.asArray()[a]
-  //     }
-
-  //   }
-  //   console.log(result)
-  //   return result;
-  // }
   /**
-   *
-   * @param {Stroke} number
-   * @param {Number} numberOfSpaces
+   * @param {Vector}
+   * @returns {boolean}
    */
-
   canMultiplyByVector(vector) {
     return this.width === vector.dimensions;
   }
   /**
-   *
    * @returns {Matrix}
    */
   transpose() {
@@ -101,33 +101,50 @@ export default class Matrix {
     }
     return new Matrix(rows);
   }
+  /**
+   * @returns {Array}
+   */
   get dimensions() {
     return [this.width, this.height];
   }
+  /**
+   * @returns {String}
+   */
   get dimensionsString() {
     return this.width + "x" + this.height;
   }
   /**
-   * 
-   * @param {number} colIndex 
+   *
+   * @param {number} colIndex
    * @returns {Vector}
    */
   getCol(colIndex) {
-    if (colIndex >= this.width || colIndex<0) 
-      throw new Error(`Column index ${colIndex} is out of bounds, matrix has ${this.width} columns`)
-      
+    if (colIndex >= this.width || colIndex < 0)
+      throw new Error(
+        `Column index ${colIndex} is out of bounds, matrix has ${this.width} columns`
+      );
+
     return this.vectors[colIndex];
   }
+  /**
+   * @returns {number}
+   */
   get height() {
-    if(this.vectors.length === 0)
-      return 0;
+    if (this.vectors.length === 0) return 0;
     return this.vectors[0].dimensions;
   }
+  /**
+   * @returns {number}
+   */
   get width() {
     return this.vectors.length;
   }
+  /**
+   * @param {Vector} vector
+   * @returns {Vector}
+   */
   multiplyOnVector(vector) {
-    if(!vector || vector.constructor.name !== "Vector")
+    if (!vector || vector.constructor.name !== "Vector")
       throw new Error("Vector was expected, got: " + vector);
     if (this.canMultiplyByVector(vector)) {
       const matrix = this.transpose();
@@ -148,8 +165,10 @@ export default class Matrix {
    * @returns {Matrix}
    */
   multiplyByMatrix(that) {
-    if(this.width !== that.height)
-      throw new Error(`Incompatible matrix dimensions: ${this.dimensionsString} and ${that.dimensionsString}`)
+    if (this.width !== that.height)
+      throw new Error(
+        `Incompatible matrix dimensions: ${this.dimensionsString} and ${that.dimensionsString}`
+      );
     let array = [];
     let thatArray = that.asArray();
     for (let i = 0; i < that.width; i++) {

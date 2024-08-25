@@ -21,6 +21,7 @@ const houseColors = [
   "#f46c2170", // orange
   "#d0f42170", // yellow
 ];
+
 const STOP = {};
 const house = [
   new Matrix([
@@ -166,15 +167,6 @@ function drawFigure(figure, arrayOfColors = []) {
     drawRect(canvas, canvasVectors, color);
   }
 }
-const randomFigure = [
-  new Matrix([
-    new Vector([0, 0, 0]),
-    new Vector([100, 0, 0]),
-    new Vector([100, 100, 0]),
-    new Vector([0, 100, 0]),
-    new Vector([0, 0, 0]),
-  ]),
-];
 
 /**
  * @param {Matrix[]}arrayOfMatrices
@@ -223,26 +215,43 @@ function moveFigure(figure, center) {
     output.push(new Matrix(arr));
   }
   return output;
-  // let output = [];
-
-  // for (let c = 0; c < figure.length; c++) {
-  //   for (let i = 0; i < figure[c].asArray().length; i++) {
-  //     const element = figure[c].height;
-  //     const currVector = element.getCol(c);
-
-  //   }
-  //   output.push(currVector.subtract(center));
-  // }
-  // return new Matrix(output)
+ 
 }
 
-const figure = new Matrix([
-  new Vector([10, 0, -10]),
-  new Vector([20, 1, -20]),
-  new Vector([30, 0, -30]),
-]);
-
-let movedHouse = moveFigure(house, new Vector([25, 25, 25]))
+const vec = new Vector([1, 2, 3]) 
+const txt = StaticMath.returnAngleBetweenVectors(vec, new Vector([0, 1, 0]))
+console.log(txt)
+/**
+ *
+ * @param {Vector} axis
+ * @param {Matrix[]} figure
+ * @param {Vector} angle
+ */
+function rotateAroundAxis(axis, figure, angle) {
+ drawLine(canvas, new Vector([0,0]), axis)
+  const angles = StaticMath.calcAngles(axis);
+  let rotatedFigure = rotateArrayOfMatrices(
+    figure,
+    angles.x,
+    angles.y,
+    angles.z
+  );
+  rotatedFigure = rotateArrayOfMatrices(
+    rotatedFigure,
+    StaticMath.degreesToRadians(angle.get(0)),
+    StaticMath.degreesToRadians(angle.get(1)),
+    StaticMath.degreesToRadians(angle.get(2))
+  );
+  angle = angle.negate();
+  rotatedFigure = rotateArrayOfMatrices(
+    rotatedFigure,
+    StaticMath.degreesToRadians(angle.get(0)),
+    StaticMath.degreesToRadians(angle.get(1)),
+    StaticMath.degreesToRadians(angle.get(2))
+  );
+  drawFigure(rotatedFigure);
+}
+let movedHouse = moveFigure(house, new Vector([25, 25, 25]));
 let currAngles = new Vector([0, 0, 0]);
 const speed = new Vector([1, 1, 1]);
 function drawFrame() {
@@ -253,25 +262,18 @@ function drawFrame() {
     StaticMath.degreesToRadians(currAngles.get(1)),
     StaticMath.degreesToRadians(currAngles.get(2))
   );
-  /*
-  func (vector, figure, angle){
-  calcAngles(vector)
-  lean house
-  rotate
-  lean back house
-  }
+canvas.drawText(200, 100, StaticMath.radiansToDegrees(txt) + "", "black");
 
-  func calcAngles(Vector){
-  return rotation matrix
-  }
-  */
-  rotatedMatrix = moveFigure(rotatedMatrix, new Vector([-25,-25,-25]))
-  drawFigure(rotatedMatrix)
-  // center of house
-  drawFilledFigure(
-    rotatedMatrix,
-    houseColors
-  );
+drawLine(canvas, new Vector([100, 100, 100]), new Vector([100, 60, 40]));
+  rotatedMatrix = moveFigure(rotatedMatrix, new Vector([-25, -25, -25]));
+  // drawFigure(rotatedMatrix);
+
+
+  drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
+
+  
+  // drawFilledFigure(rotatedMatrix, houseColors);
+
   currAngles = currAngles.add(speed);
 
   requestAnimationFrame(drawFrame);
@@ -291,4 +293,4 @@ function toCanvasMatrix(matrix) {
   }
   return new Matrix(canvasVectors);
 }
-// drawRect(canvas, randomFigure)
+

@@ -5,7 +5,6 @@ export default class RotationVector {
   constructor(vector) {
     this.vector = vector;
   }
-  // static rotateAroundXAxis (matrix, angle)
   rotateAroundXAxis(angleInRad) {
     const cos = Math.cos(angleInRad);
     const sin = Math.sin(angleInRad);

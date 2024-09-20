@@ -118,7 +118,7 @@ describe("Matrix", () => {
       assert.deepStrictEqual(matrix.width, expected);
     });
   });
-    describe("#multiplyOnVector", () => {
+    describe("#VectorMultiply", () => {
       it("throws an error if incompatible size", () => {
         // add code
         const matrix = new Matrix([
@@ -130,7 +130,7 @@ describe("Matrix", () => {
         const vector = new Vector([4, 3, 2]);
         assert.throws(
           () => {
-            matrix.multiplyOnVector(vector);
+            matrix.vectorMultiply(vector);
           },
           {
             message:
@@ -147,12 +147,12 @@ describe("Matrix", () => {
         ]);
         const vector = new Vector([4, 3, 2]);
         assert.deepStrictEqual(
-          matrix.multiplyOnVector(vector),
+          matrix.vectorMultiply(vector),
           new Vector([47, 46, 49])
         );
       });
     });
-   describe("#multiplyByMatrix", () => {
+   describe("#matrixMultiply", () => {
      it("multiplying incompatible matrices throws an error", () => {
        const m2x2 = Matrix.fromRowsArray([
          [1, 1],
@@ -161,24 +161,24 @@ describe("Matrix", () => {
        const m1x1 = new Matrix([new Vector([2])]);
        const m1x2 = Matrix.fromRowsArray([[2], [1]]);
        const m2x1 = Matrix.fromRowsArray([[1, 2]]);
-       assert.throws(() => m2x2.multiplyByMatrix(m1x1), {
+       assert.throws(() => m2x2.matrixMultiply(m1x1), {
          message: "Incompatible matrix dimensions: 2x2 and 1x1",
        });
-       assert.throws(() => m2x2.multiplyByMatrix(m2x1), {
+       assert.throws(() => m2x2.matrixMultiply(m2x1), {
          message: "Incompatible matrix dimensions: 2x2 and 2x1",
        });
-       assert.throws(() => m1x1.multiplyByMatrix(m1x2), {
+       assert.throws(() => m1x1.matrixMultiply(m1x2), {
          message: "Incompatible matrix dimensions: 1x1 and 1x2",
        });
      });
      it("multiplying empty matrix by empty matrix returns an empty matrix", () => {
        assert.deepStrictEqual(
-         new Matrix([]).multiplyByMatrix(new Matrix([])),
+         new Matrix([]).matrixMultiply(new Matrix([])),
          new Matrix([])
        );
      });
      it("multiplying 1x1 by 1x1 returns a 1x1 matrix", () => {
-       const actual = new Matrix([new Vector([-3])]).multiplyByMatrix(
+       const actual = new Matrix([new Vector([-3])]).matrixMultiply(
          new Matrix([new Vector([2])])
        );
        assert.deepStrictEqual(actual, new Matrix([new Vector([-6])]));
@@ -186,7 +186,7 @@ describe("Matrix", () => {
      it("multiplying 1x1 by 1x1 returns a 1x1 matrix", () => {
        let m2x1 = Matrix.fromRowsArray([[1, 3]]);
        let m1x2 = Matrix.fromRowsArray([[3], [4]]);
-       const actual = m2x1.multiplyByMatrix(m1x2);
+       const actual = m2x1.matrixMultiply(m1x2);
        assert.deepStrictEqual(actual, new Matrix([new Vector([15])]));
      });
      it("can multiply matrix by matrix", () => {
@@ -205,7 +205,7 @@ describe("Matrix", () => {
          [-19, 28, -108],
          [-3 + 22, 8 + 24 + 44, 9 + 11 * 13],
        ]);
-       const actual = matrix.multiplyByMatrix(matrix1);
+       const actual = matrix.matrixMultiply(matrix1);
        console.log(actual.toString());
        assert.deepStrictEqual(actual, expected);
      });

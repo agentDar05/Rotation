@@ -168,6 +168,8 @@ function drawFigure(figure, arrayOfColors = []) {
   }
 }
 
+
+
 /**
  * @param {Matrix[]}arrayOfMatrices
  * @param {number} angleX
@@ -186,7 +188,7 @@ function rotateArrayOfMatrices(
     const currMatrix = arrayOfMatrices[m].transpose();
 
     const rotationMatrix = StaticMath.rotationMatrix(angleX, angleY, angleZ);
-    result.push(currMatrix.multiplyByMatrix(rotationMatrix).transpose());
+    result.push(currMatrix.matrixMultiply(rotationMatrix).transpose());
     // const array = [];
     // const matrix = new Matrix(array)
     // for (let v = 0; v < currMatrix.dimensions; v++) {
@@ -215,20 +217,42 @@ function moveFigure(figure, center) {
     output.push(new Matrix(arr));
   }
   return output;
- 
 }
-
-const vec = new Vector([1, 2, 3]) 
-const txt = StaticMath.returnAngleBetweenVectors(vec, new Vector([0, 1, 0]))
-console.log(txt)
 /**
  *
+ * @param {Vector} vector
+ * @param {number} ax
+ * @param {number} ay
+ * @param {number} az
+ */
+function rotateVec(vector, ax, ay, az) {
+  return RotationVector.getRotationMatrix(ax, ay, az).vectorMultiply(
+    vector
+  );
+}
+const vec = new Vector([1, 2, 3]);
+const angleAroundXAxis = StaticMath.returnAngleBetweenVectors(
+  vec.projectOnYZ(),
+  new Vector([0, 1, 0])
+);
+const vectorOnPlaneXY = rotateVec(vec, angleAroundXAxis, 0, 0);
+const angleAroundZAxis = StaticMath.returnAngleBetweenVectors(
+  vectorOnPlaneXY,
+  new Vector([1, 0, 0])
+);
+const centerOfCoords = new Vector([0, 0, 0]);
+const newAxis = rotateVec(vectorOnPlaneXY, 0, 0, angleAroundZAxis);
+
+let rotatedHouse = rotateArrayOfMatrices(house, angleAroundXAxis, 0, 0);
+rotatedHouse = rotateArrayOfMatrices(rotatedHouse, 0, 0, angleAroundZAxis);
+
+/**
  * @param {Vector} axis
  * @param {Matrix[]} figure
  * @param {Vector} angle
  */
 function rotateAroundAxis(axis, figure, angle) {
- drawLine(canvas, new Vector([0,0]), axis)
+  drawLine(canvas, new Vector([0, 0]), axis);
   const angles = StaticMath.calcAngles(axis);
   let rotatedFigure = rotateArrayOfMatrices(
     figure,
@@ -262,16 +286,39 @@ function drawFrame() {
     StaticMath.degreesToRadians(currAngles.get(1)),
     StaticMath.degreesToRadians(currAngles.get(2))
   );
-canvas.drawText(200, 100, StaticMath.radiansToDegrees(txt) + "", "black");
+  canvas.drawText(
+    200,
+    100,
+    StaticMath.radiansToDegrees(angleAroundXAxis) + "",
+    "black"
+  );
 
-drawLine(canvas, new Vector([100, 100, 100]), new Vector([100, 60, 40]));
+  // drawLine(canvas, new Vector([100, 100, 100]), new Vector([100, 60, 40]));
   rotatedMatrix = moveFigure(rotatedMatrix, new Vector([-25, -25, -25]));
   // drawFigure(rotatedMatrix);
+  drawLine(
+    canvas,
+    toCanvasVector(centerOfCoords),
+    toCanvasVector(vec.scale(10))
+  );
+  drawLine(
+    canvas,
+    toCanvasVector(centerOfCoords), 
+    toCanvasVector(new Vector([10, 0, 0]))
+  )
+  drawLine(
+    canvas,
+    toCanvasVector(centerOfCoords),
+    toCanvasVector(vectorOnPlaneXY.scale(10))
+  );
+  drawLine(
+    canvas,
+    toCanvasVector(centerOfCoords),
+    toCanvasVector(newAxis.scale(10))
+  );
 
+  // drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
 
-  drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
-
-  
   // drawFilledFigure(rotatedMatrix, houseColors);
 
   currAngles = currAngles.add(speed);
@@ -293,4 +340,3 @@ function toCanvasMatrix(matrix) {
   }
   return new Matrix(canvasVectors);
 }
-

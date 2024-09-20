@@ -14,7 +14,7 @@ const canvas = new Canvas2D(document.querySelector(".canvas-container"), {
   height: canvasHeight,
 });
 
-function drawLine(drawCanvas, v1, v2) {
+function drawLineBtwVectors(drawCanvas, v1, v2) {
   // console.log(drawCanvas, v1, v2);
   drawCanvas.drawLine(
     v1.asArray()[0],
@@ -171,7 +171,7 @@ function drawLines(canvas, figure) {
     const curr = vectors[i];
     const next = vectors[i + 1];
     if (curr instanceof Vector && next instanceof Vector) {
-      drawLine(canvas, curr, next);
+      drawLineBtwVectors(canvas, curr, next);
       array.push(vectors[i].asArray());
     }
   }
@@ -192,7 +192,7 @@ function rotateX(vector, angle) {
       vector.asArray()[0],
       Math.cos(newAngle),
       Math.sin(newAngle),
-    ]).times(c);
+    ]).scale(c);
   }
 }
 function rotateY(vector, angle) {
@@ -205,7 +205,7 @@ function rotateY(vector, angle) {
       Math.cos(newAngle),
       vector.asArray()[1],
       Math.sin(newAngle),
-    ]).times(c);
+    ]).scale(c);
   }
 }
 
@@ -219,7 +219,7 @@ function rotateZ(vector, angle) {
       Math.cos(newAngle),
       Math.sin(newAngle),
       vector.asArray()[2],
-    ]).times(c);
+    ]).scale(c);
   }
 }
 /**
@@ -292,9 +292,9 @@ function rotateVectors(vectors, angleX, angleY, angleZ) {
     if (vectors[a] instanceof Vector) {
       const aCoord = vectors[a];
       const newVector = bases1[0]
-        .times(aCoord.asArray()[0])
-        .add(bases1[1].times(aCoord.asArray()[1]))
-        .add(bases1[2].times(aCoord.asArray()[2]));
+        .scale(aCoord.asArray()[0])
+        .add(bases1[1].scale(aCoord.asArray()[1]))
+        .add(bases1[2].scale(aCoord.asArray()[2]));
       newVectors.push(newVector);
     } else newVectors.push({});
   }
@@ -329,7 +329,7 @@ function drawFigure() {
   const center = new Vector([25, 25, 0]);
   const rotatedHouse = moveFigure(
     rotateVectors(moveFigure(house, center), 20, 0, 0),
-    center.times(-1)
+    center.scale(-1)
   );
   const rotateHouse = moveFigure(
     rotateVectors(
@@ -338,7 +338,7 @@ function drawFigure() {
       angleDeg,
       angleDeg
     ),
-    center.times(-1)
+    center.scale(-1)
   );
   
   drawLines(canvas, changeBases(rotatedHouse));

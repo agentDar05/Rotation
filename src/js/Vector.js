@@ -28,15 +28,15 @@ export default class Vector {
   get(idx) {
     return this.numbers[idx];
   }
-  times(numberOfTimes) {
+  scale(scalar) {
     const output = [];
     for (let i = 0; i < this.numbers.length; i++) {
-      output.push(this.numbers[i] * numberOfTimes);
+      output.push(this.numbers[i] * scalar);
     }
     return new Vector(output);
   }
   negate() {
-    return this.times(-1);
+    return this.scale(-1);
   }
   /**
    * @param {Vector} b
@@ -44,9 +44,8 @@ export default class Vector {
   projectOn(b) {
     const square = b.dot(b);
     const dotProduct = this.dot(b);
-    return b.times(dotProduct / square);
+    return b.scale(dotProduct / square);
   }
-
   rotation(angleInDegrees) {
     const angleInRadians = StaticMath.degreesToRadians(angleInDegrees);
     const cos = Math.cos(angleInRadians);
@@ -57,7 +56,7 @@ export default class Vector {
     ]);
 
     const vector = new Vector(this.numbers);
-    return matrix.multiplyOnVector(vector);
+    return matrix.vectorMultiply(vector);
   }
   toString() {
     return "Vector " + this.numbers;
@@ -132,7 +131,7 @@ export default class Vector {
    * @returns {Vector}
    */
   subtract(subtrahend) {
-    if (subtrahend instanceof Vector) return this.add(subtrahend.times(-1));
+    if (subtrahend instanceof Vector) return this.add(subtrahend.scale(-1));
     else return this.numbers;
   }
   asArray() {
@@ -147,9 +146,8 @@ export default class Vector {
     return Math.sqrt(sum);
   }
   projectOnYZ() {
-    const clone = new Vector(this.numbers)
-    if (clone[0])
-    clone[0]  = 0
-    return clone
+    const clone = new Vector(this.numbers);
+    if (clone[0]) clone[0] = 0;
+    return clone;
   }
 }

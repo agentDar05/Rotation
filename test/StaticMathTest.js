@@ -44,8 +44,8 @@ describe("#returnAngleBetweenVectors", () => {
 });
 describe("#angleToPlaneXZ", () => {
   it("returns angle of vector", () => {
-    let expected = new RotationVector(new Vector([1, 0, 0]));
-    expected = expected.rotateAroundZAxis(StaticMath.degreesToRadians(30));
+    let expected = new Vector([1, 0, 0]);
+    expected = RotationVector.rotateAroundZAxis(StaticMath.degreesToRadians(30)).vectorMultiply(expected);
     AssertUtils.assertNumbersEqual(
       StaticMath.angleToPlaneXZ(expected),
       StaticMath.degreesToRadians(30),
@@ -66,10 +66,10 @@ describe("#angleToPlaneXZ", () => {
 
 describe("#rotationMatrix", () => {
   it("returns rotation matrix", () => {
-    const matrixX = StaticMath.returnXMatrix(Math.PI / 9);
-    const matrixY = StaticMath.returnYMatrix(Math.PI / 2);
-    const matrixZ = StaticMath.returnZMatrix(Math.PI);
-    const matrix = matrixZ.multiplyByMatrix(matrixX.multiplyByMatrix(matrixY));
+    const matrixX = StaticMath.getXMatrix(Math.PI / 9);
+    const matrixY = StaticMath.getYMatrix(Math.PI / 2);
+    const matrixZ = StaticMath.getZMatrix(Math.PI);
+    const matrix = matrixZ.matrixMultiply(matrixX.matrixMultiply(matrixY));
     AssertUtils.assertMatrixEqual(
       StaticMath.rotationMatrix(Math.PI / 9, Math.PI / 2, Math.PI),
       matrix

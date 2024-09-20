@@ -33,8 +33,8 @@ export default class Matrix {
     return Matrix.fromRows(rowVectors);
   }
   /**
-   * 
-   * @param {Vector} v 
+   *
+   * @param {Vector} v
    * @returns {Matrix}
    */
   addVector(v) {
@@ -45,7 +45,7 @@ export default class Matrix {
     return new Matrix(translated);
   }
   /**
-   * 
+   *
    * @returns {Vector[]}
    */
   asArray() {
@@ -64,7 +64,7 @@ export default class Matrix {
     return new Matrix(arr);
   }
   /**
-   * 
+   *
    * @returns {string}
    */
   toString() {
@@ -143,7 +143,7 @@ export default class Matrix {
    * @param {Vector} vector
    * @returns {Vector}
    */
-  multiplyOnVector(vector) {
+  vectorMultiply(vector) {
     if (!vector || vector.constructor.name !== "Vector")
       throw new Error("Vector was expected, got: " + vector);
     if (this.canMultiplyByVector(vector)) {
@@ -164,7 +164,7 @@ export default class Matrix {
    * @param {Matrix} that
    * @returns {Matrix}
    */
-  multiplyByMatrix(that) {
+  matrixMultiply(that) {
     if (this.width !== that.height)
       throw new Error(
         `Incompatible matrix dimensions: ${this.dimensionsString} and ${that.dimensionsString}`
@@ -172,7 +172,7 @@ export default class Matrix {
     let array = [];
     let thatArray = that.asArray();
     for (let i = 0; i < that.width; i++) {
-      array.push(this.multiplyOnVector(thatArray[i]));
+      array.push(this.vectorMultiply(thatArray[i]));
     }
     return new Matrix(array);
   }

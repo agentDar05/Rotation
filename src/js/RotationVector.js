@@ -1,11 +1,12 @@
 import Matrix from "./Matrix.js";
+import StaticMath from "./StaticMath.js";
 
 export default class RotationVector {
   vector;
   constructor(vector) {
     this.vector = vector;
   }
-  rotateAroundXAxis(angleInRad) {
+  static rotateAroundXAxis(angleInRad) {
     const cos = Math.cos(angleInRad);
     const sin = Math.sin(angleInRad);
     const matrix = Matrix.fromRowsArray([
@@ -13,9 +14,9 @@ export default class RotationVector {
       [0, cos, -sin],
       [0, sin, cos],
     ]);
-    return matrix.multiplyOnVector(this.vector);
+    return matrix;
   }
-  rotateAroundZAxis(angleInRad) {
+  static rotateAroundZAxis(angleInRad) {
     const cos = Math.cos(angleInRad);
     const sin = Math.sin(angleInRad);
     const matrix = Matrix.fromRowsArray([
@@ -23,9 +24,9 @@ export default class RotationVector {
       [sin, cos, 0],
       [0, 0, 1],
     ]);
-    return matrix.multiplyOnVector(this.vector);
+    return matrix;
   }
-  rotateAroundYAxis(angleInRad) {
+  static rotateAroundYAxis(angleInRad) {
     const cos = Math.cos(angleInRad);
     const sin = Math.sin(angleInRad);
     const matrix = Matrix.fromRowsArray([
@@ -33,12 +34,17 @@ export default class RotationVector {
       [0, 1, 0],
       [-sin, 0, cos],
     ]);
-    return matrix.multiplyOnVector(this.vector);
+    return matrix;
   }
-  rotateVector(angleX, angleY, angleZ) {
-    return this.rotateAroundXAxis(angleX).dot(
-      this.rotateAroundYAxis(angleY).dot(
-      this.rotateAroundZAxis(angleZ))
+
+  static getRotationMatrix(angleX, angleY, angleZ) {
+    const matrixX = StaticMath.getXMatrix(angleX)
+    const matrixY = StaticMath.getYMatrix(angleY)
+    const matrixZ = StaticMath.getZMatrix(angleZ)
+    return matrixX.matrixMultiply(
+      matrixY.matrixMultiply(
+        matrixZ
+      )
     );
   }
 }

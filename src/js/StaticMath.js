@@ -17,7 +17,7 @@ export default class StaticMath {
    * @param {number} angleXRad
    * @returns {Matrix}
    */
-  static returnXMatrix(angleXRad) {
+  static getXMatrix(angleXRad) {
     const cos = Math.cos(angleXRad);
     const sin = Math.sin(angleXRad);
     return Matrix.fromRowsArray([
@@ -31,7 +31,7 @@ export default class StaticMath {
    * @param {number} angleXRad
    * @returns {Matrix}
    */
-  static returnZMatrix(angleZRad) {
+  static getZMatrix(angleZRad) {
     return Matrix.fromRowsArray([
       [Math.cos(angleZRad), -Math.sin(angleZRad), 0],
       [Math.sin(angleZRad), Math.cos(angleZRad), 0],
@@ -43,7 +43,7 @@ export default class StaticMath {
    * @param {number} angleXRad
    * @returns {Matrix}
    */
-  static returnYMatrix(angleYRad) {
+  static getYMatrix(angleYRad) {
     return Matrix.fromRowsArray([
       [Math.cos(angleYRad), 0, Math.sin(angleYRad)],
       [0, 1, 0],
@@ -56,6 +56,7 @@ export default class StaticMath {
    * @returns {number}
    */
   static angleToPlaneXZ(vector) {
+    console.log(vector)
     const normalVector = new Vector([0, vector.get(1), 0]);
     const cos =
       vector.dot(normalVector) / vector.length() / normalVector.length();
@@ -107,11 +108,11 @@ export default class StaticMath {
   }
 
   static rotationMatrix(angleXInRad, angleYInRad, angleZInRad) {
-    const matrixX = StaticMath.returnXMatrix(angleXInRad);
-    const matrixY = StaticMath.returnYMatrix(angleYInRad);
-    const matrixZ = StaticMath.returnZMatrix(angleZInRad);
+    const matrixX = StaticMath.getXMatrix(angleXInRad);
+    const matrixY = StaticMath.getYMatrix(angleYInRad);
+    const matrixZ = StaticMath.getZMatrix(angleZInRad);
 
-    const matrix = matrixZ.multiplyByMatrix(matrixX.multiplyByMatrix(matrixY));
+    const matrix = matrixZ.matrixMultiply(matrixX.matrixMultiply(matrixY));
     return matrix;
   }
 

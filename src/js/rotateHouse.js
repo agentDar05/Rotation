@@ -2,7 +2,6 @@ import Matrix from "./Matrix.js";
 import Canvas2D from "./Canvas2D.js";
 import Vector from "./Vector.js";
 import StaticMath from "./StaticMath.js";
-import RotationVector from "./RotationVector.js";
 import CanvasUtils from "./CanvasUtils.js";
 import Rotate from "./Rotate.js";
 const canvasHeight = 300;

@@ -4,7 +4,6 @@ import Vector from "../src/js/Vector.js";
 import StaticMath from "../src/js/StaticMath.js";
 import Matrix from "../src/js/Matrix.js";
 import { describe } from "mocha";
-import RotationVector from "../src/js/RotationVector.js";
 import AssertUtils from "../src/js/AssertUtils.js";
 describe("#assertMatrixEqual", () => {
   it("throws Error if matrices aren't equal", () => {
@@ -45,7 +44,7 @@ describe("#returnAngleBetweenVectors", () => {
 describe("#angleToPlaneXZ", () => {
   it("returns angle of vector", () => {
     let expected = new Vector([1, 0, 0]);
-    expected = RotationVector.rotateAroundZAxis(StaticMath.degreesToRadians(30)).vectorMultiply(expected);
+    expected = StaticMath.getZMatrix(StaticMath.degreesToRadians(30)).vectorMultiply(expected);
     AssertUtils.assertNumbersEqual(
       StaticMath.angleToPlaneXZ(expected),
       StaticMath.degreesToRadians(30),

@@ -25,7 +25,9 @@ export default class AssertUtils {
       }
     }
   }
-  static assertVectorsEqual(v1, v2, epsilon) {
+  static assertVectorsEqual(v1, v2, epsilon = 1e-6) {
+    if(epsilon === undefined || epsilon === null)
+      throw new Error("Epsilon has to be defined, current: " + epsilon);
     if (v1.dimensions !== v2.dimensions)
       throw new Error("Vectors must have the same dimensions");
     for (let i = 0; i < v1.dimensions; i++) {

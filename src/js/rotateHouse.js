@@ -12,30 +12,13 @@ const canvas = new Canvas2D(document.querySelector(".rotate-container"), {
 });
 
 
-const vec = new Vector([1, 2, 3]);
-
-
-
-const angleBtwVectorAndY = StaticMath.angleToPlaneXY(vec.projectOnYZ(new Vector([0, 1, 0])))
-const vectorOnXY = Rotate.rotateVec(vec, angleBtwVectorAndY, 0 ,0)
-const angleBtwVecAndX = StaticMath.angleToPlaneXZ(vectorOnXY)
-const rotatedVector = Rotate.rotateVec(vectorOnXY, 0, 0, angleBtwVecAndX)
-
-/*---------------------------------------------------------*/
-
-const angleAroundXAxis = StaticMath.returnAngleBetweenVectors(
-  vec.projectOnYZ(),
-  new Vector([0, 1, 0])
-);
-const vectorOnPlaneXY = Rotate.rotateVec(vec, angleAroundXAxis, 0, 0);
-const angleAroundZAxis = StaticMath.returnAngleBetweenVectors(
-  vectorOnPlaneXY,
-  new Vector([1, 0, 0])
-);
-const centerOfCoords = new Vector([0, 0, 0]);
-const newAxis = Rotate.rotateVec(vectorOnPlaneXY, 0, 0, angleAroundZAxis);
-
-
+const rotationAxis = new Vector([1, 2, 3]);
+// Put the vector on XY plane
+const angleBtwVectorAndXY = StaticMath.angleToPlaneXY(rotationAxis.projectOnYZ(Vector.YAXIS));
+const vectorOnXY = Rotate.rotateVec(rotationAxis, angleBtwVectorAndXY, 0 ,0);
+// Align the vector with the X axis
+const angleBtwVecXYAndXZ = StaticMath.angleToPlaneXZ(vectorOnXY);
+const vectorAlignedWithX = Rotate.rotateVec(vectorOnXY, 0, 0, angleBtwVecXYAndXZ);
 
 const houseColors = [
   "#f4212170", // red
@@ -121,16 +104,6 @@ const house = [
     new Vector([25, 70, 0]),
   ]),
 ];
-/**
- * @param {Vector} vector
- * @returns {Vector}
- */
-
-/**
- *
- * @param {Canvas2D} canvas
- * @param {Matrix} figure
- */
 
 let rotatedHouse = Rotate.rotateArrayOfMatrices(house, angleAroundXAxis, 0, 0);
 rotatedHouse = Rotate.rotateArrayOfMatrices(rotatedHouse, 0, 0, angleAroundZAxis);
@@ -141,23 +114,6 @@ function convertMatrixToCoords(matrix) {
   }
   return array;
 }
-
-/**
- * @param {Matrix} matrix
- * @param {Array} color
- */
-
-
-
-
-
-/**
- * @param {Matrix[]}arrayOfMatrices
- * @param {number} angleX
- * @param {number} angleY
- * @param {number} angleZ
- *
- */
 
 /**
  *
@@ -178,21 +134,6 @@ function moveFigure(figure, center) {
   }
   return output;
 }
-/**
- *
- * @param {Vector} vector
- * @param {number} ax
- * @param {number} ay
- * @param {number} az
- */
-
-
-
-/**
- * @param {Vector} axis
- * @param {Matrix[]} figure
- * @param {Vector} angle
- */
 
 let movedHouse = moveFigure(house, new Vector([25, 25, 25]));
 let currAngles = new Vector([0, 0, 0]);
@@ -218,7 +159,7 @@ function drawFrame() {
   // CanvasUtils.drawLine(
   //   canvas,
   //   centerOfCoords,
-  //   vec.scale(10)
+  //   rotationAxis.scale(10)
   // );
   // CanvasUtils.drawLine(
   //   canvas,
@@ -235,7 +176,7 @@ function drawFrame() {
   //   centerOfCoords,
   //   newAxis.scale(10)
   // );
-    CanvasUtils.drawLine(canvas, centerOfCoords, rotatedVector.scale(10
+    CanvasUtils.drawLine(canvas, centerOfCoords, vectorAlignedWithX.scale(10
 
     ))
   // drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
@@ -249,9 +190,3 @@ function drawFrame() {
 requestAnimationFrame(() => {
   drawFrame();
 });
-/**
- * @param {Matrix} matrix
- * @param {number} i
- * @returns {Matrix}
- */
-

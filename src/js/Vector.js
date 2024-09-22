@@ -2,7 +2,13 @@ import Matrix from "./Matrix.js";
 import StaticMath from "./StaticMath.js";
 
 export default class Vector {
+  static XAXIS = new Vector([1, 0, 0])
+  static YAXIS = new Vector([0, 1, 0])
+  static ZAXIS = new Vector([0, 0, 1])
+
   numbers;
+
+  /** @param {number[]} numbers */
   constructor(numbers) {
     if (!Array.isArray(numbers))
       throw new Error(
@@ -134,8 +140,10 @@ export default class Vector {
     if (subtrahend instanceof Vector) return this.add(subtrahend.scale(-1));
     else return this.numbers;
   }
+
+  /** @return {number[]} */
   asArray() {
-    return this.numbers;
+    return Array.from(this.numbers);
   }
 
   length() {
@@ -146,8 +154,10 @@ export default class Vector {
     return Math.sqrt(sum);
   }
   projectOnYZ() {
-    const clone = new Vector(this.numbers);
-    if (clone[0]) clone[0] = 0;
-    return clone;
+    if(this.dimensions !== 3)
+      throw new Error("Vector must be in 3D space to project it on XY plane. Current: " + this.asArray());
+    const components = this.asArray();
+    components[0] = 0;
+    return new Vector(components);
   }
 }

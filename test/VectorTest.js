@@ -72,15 +72,16 @@ describe("Vector", () => {
     });
   });
   describe("projectOnYZ", () => {
-    it("projects the vector on plane yz", () => {
-      const v = new Vector([1, 2, 3]);
-      const v1 = new Vector([0, 2, 0]);
-      AssertUtils.assertVectorsEqual(v.projectOnYZ(), new Vector([0, 2, 3]));
-      AssertUtils.assertVectorsEqual(v1.projectOnYZ(), new Vector([0, 2, 0]));
+    it("throws if vector is not 3D", () => {
+      assert.throws(()=> new Vector([]).projectOnYZ());
+      assert.throws(()=> new Vector([1]).projectOnYZ());
+      assert.throws(()=> new Vector([1, 2]).projectOnYZ());
+      assert.throws(()=> new Vector([1, 2, 3, 4]).projectOnYZ());
+      new Vector([1, 2, 3]).projectOnYZ()
     });
-    it("returns empty vector if vector is empty", () => {
-      const v = new Vector([]);
-      AssertUtils.assertVectorsEqual(v.projectOnYZ(), new Vector([]));
+    it("projects the vector on plane yz", () => {
+      AssertUtils.assertVectorsEqual(new Vector([1, 2, 3]).projectOnYZ(), new Vector([0, 2, 3]));
+      AssertUtils.assertVectorsEqual(new Vector([0, 2, 0]).projectOnYZ(), new Vector([0, 2, 0]));
     });
   });
 });

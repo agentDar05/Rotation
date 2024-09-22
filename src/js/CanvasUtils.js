@@ -1,6 +1,6 @@
-import Rotate from "./Rotate.js";
 import Matrix from "./Matrix.js";
 import Vector from "./Vector.js";
+
 export default class CanvasUtils {
     static drawRect(canvas, figure, color = "black") {
         const vectors = figure.asArray();

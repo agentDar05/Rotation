@@ -161,17 +161,17 @@ export default class Matrix {
 
   /**
    *
-   * @param {Matrix} that
+   * @param {Matrix} right
    * @returns {Matrix}
    */
-  matrixMultiply(that) {
-    if (this.width !== that.height)
+  matrixMultiply(right) {
+    if (this.width !== right.height)
       throw new Error(
-        `Incompatible matrix dimensions: ${this.dimensionsString} and ${that.dimensionsString}`
+        `Incompatible matrix dimensions: ${this.dimensionsString} and ${right.dimensionsString}`
       );
     let array = [];
-    let thatArray = that.asArray();
-    for (let i = 0; i < that.width; i++) {
+    let thatArray = right.asArray();
+    for (let i = 0; i < right.width; i++) {
       array.push(this.vectorMultiply(thatArray[i]));
     }
     return new Matrix(array);

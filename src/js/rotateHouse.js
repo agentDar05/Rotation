@@ -145,10 +145,13 @@ const centerOfCoords = new Vector([0, 0, 0]);
 const alignedHouse = Rotate.rotateArrayOfMatrices(house,angleBtwVectorAndXY, 0, angleBtwVecXYAndXZ)
 let rotatedHouse = Rotate.rotateArrayOfMatrices(house, angleBtwVectorAndXY, 0, 0);
 rotatedHouse = Rotate.rotateArrayOfMatrices(rotatedHouse, 0, 0, angleBtwVecXYAndXZ);
+let angle = 0;
+
 function drawFrame() {
   canvas.clear();
-    CanvasUtils.drawLine(canvas, centerOfCoords, vectorAlignedWithX);
-    CanvasUtils.drawFigure(canvas, alignedHouse, houseColors);
+  CanvasUtils.drawLine(canvas, centerOfCoords, vectorAlignedWithX);
+  CanvasUtils.drawFigure(canvas, Rotate.rotateArrayOfMatrices(alignedHouse, 0, angle, 0), houseColors);
+  angle += 0.01;
   // drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
 
   // drawFilledFigure(rotatedMatrix, houseColors);

@@ -111,9 +111,7 @@ export default class StaticMath {
     const matrixX = StaticMath.getXMatrix(angleXInRad);
     const matrixY = StaticMath.getYMatrix(angleYInRad);
     const matrixZ = StaticMath.getZMatrix(angleZInRad);
-
-    const matrix = matrixZ.matrixMultiply(matrixX.matrixMultiply(matrixY));
-    return matrix;
+    return matrixZ.matrixMultiply(matrixX.matrixMultiply(matrixY));
   }
 
   /**

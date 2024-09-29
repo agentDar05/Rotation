@@ -43,12 +43,12 @@ export default class CanvasUtils {
      */
     static drawFigure(canvas, figure, arrayOfColors = []) {
         for (let i = 0; i < figure.length; i++) {
-          const canvasVectors = CanvasUtils.toCanvasMatrix(figure[i]);
-          let color = "black";
-          if (arrayOfColors[i]) {
-            color = "" + arrayOfColors[i];
-          }
-          CanvasUtils.drawRect(canvas, canvasVectors, color);
+            const canvasFigure = figure[i];
+            let color = "black";
+            if (arrayOfColors[i]) {
+                color = "" + arrayOfColors[i];
+            }
+            CanvasUtils.drawRect(canvas, canvasFigure, color);
         }
     }
       static drawFilledRect(canvas, matrix, color) {

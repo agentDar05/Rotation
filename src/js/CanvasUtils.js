@@ -2,6 +2,12 @@ import Matrix from "./Matrix.js";
 import Vector from "./Vector.js";
 
 export default class CanvasUtils {
+    /**
+     *
+     * @param {Canvas2D} canvas
+     * @param {Matrix} figure
+     * @param {String} color
+     */
     static drawRect(canvas, figure, color = "black") {
         const vectors = figure.asArray();
         for (let i = 0; i < vectors.length; i++) {
@@ -15,14 +21,27 @@ export default class CanvasUtils {
           }
         }
       }
-      static toCanvasMatrix(matrix) {
+
+    /**
+     *
+     * @param {Matrix} matrix
+     * @return {Matrix}
+     */
+    static toCanvasMatrix(matrix) {
         const canvasVectors = [];
         for (const n of matrix.asArray()) {
-          canvasVectors.push(CanvasUtils.toCanvasVector(n));
+            canvasVectors.push(CanvasUtils.toCanvasVector(n));
         }
         return new Matrix(canvasVectors);
-      }
-      static drawFigure(canvas, figure, arrayOfColors = []) {
+    }
+
+    /**
+     *
+     * @param {Canvas2D} canvas
+     * @param {Matrix[]} figure
+     * @param arrayOfColors
+     */
+    static drawFigure(canvas, figure, arrayOfColors = []) {
         for (let i = 0; i < figure.length; i++) {
           const canvasVectors = CanvasUtils.toCanvasMatrix(figure[i]);
           let color = "black";
@@ -31,7 +50,7 @@ export default class CanvasUtils {
           }
           CanvasUtils.drawRect(canvas, canvasVectors, color);
         }
-      }
+    }
       static drawFilledRect(canvas, matrix, color) {
         const coords = convertMatrixToCoords(matrix);
         canvas.drawFilledPath(coords, color);
@@ -47,8 +66,8 @@ export default class CanvasUtils {
           CanvasUtils.drawFilledRect(canvas, canvasVectors, color);
         }
       }
+
       static drawLine(drawCanvas, v1, v2, color = "black") {
-  
         drawCanvas.drawLine(
           CanvasUtils.toCanvasVector(v1).asArray()[0],
           CanvasUtils.toCanvasVector(v1).asArray()[1],
@@ -57,6 +76,7 @@ export default class CanvasUtils {
           color
         );
       }
+
       static toCanvasVector(vector) {
         const v = vector.asArray();
         const arr = [v[0] + 150, 150 - v[1]];

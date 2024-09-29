@@ -18,7 +18,7 @@ export default class Rotate {
      * @param {number} angleX
      * @param {number} angleY
      * @param {number} angleZ
-     * @return {*[]}
+     * @return {Matrix[]}
      */
     static rotateArrayOfMatrices(arrayOfMatrices, angleX = 0, angleY = 0, angleZ = 0) {
         const result = [];

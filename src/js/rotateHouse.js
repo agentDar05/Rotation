@@ -131,7 +131,7 @@ let currAngles = new Vector([0, 0, 0]);
 const speed = new Vector([1, 1, 1]);
 
 
-const rotationAxis = new Vector([1, 2, 3]);
+const rotationAxis = new Vector([1, 2, 3]).scale(10);
 // Put the vector on XY plane, expected: [0, 2, 3]
 let vecProjectionOnYZ = rotationAxis.projectOnYZ(Vector.YAXIS);
 // Angle between projection & XY, expected: 0.9827937
@@ -147,40 +147,8 @@ let rotatedHouse = Rotate.rotateArrayOfMatrices(house, angleBtwVectorAndXY, 0, 0
 rotatedHouse = Rotate.rotateArrayOfMatrices(rotatedHouse, 0, 0, angleBtwVecXYAndXZ);
 function drawFrame() {
   canvas.clear();
-  let rotatedMatrix = Rotate.rotateArrayOfMatrices(
-    movedHouse,
-    StaticMath.degreesToRadians(currAngles.get(0)),
-    StaticMath.degreesToRadians(currAngles.get(1)),
-    StaticMath.degreesToRadians(currAngles.get(2))
-  );
-
-  // drawLine(canvas, new Vector([100, 100, 100]), new Vector([100, 60, 40]));
-  rotatedMatrix = moveFigure(rotatedMatrix, new Vector([-25, -25, -25]));
-  // drawFigure(rotatedMatrix);
-  // CanvasUtils.drawLine(
-  //   canvas,
-  //   centerOfCoords,
-  //   rotationAxis.scale(10)
-  // );
-  // CanvasUtils.drawLine(
-  //   canvas,
-  //   centerOfCoords, 
-  //   new Vector([10, 0, 0])
-  // )
-  // CanvasUtils.drawLine(
-  //   canvas,
-  //   centerOfCoords,
-  //   vectorOnPlaneXY.scale(10)
-  // );
-  // CanvasUtils.drawLine(
-  //   canvas,
-  //   centerOfCoords,
-  //   newAxis.scale(10)
-  // );
-    CanvasUtils.drawLine(canvas, centerOfCoords, vectorAlignedWithX.scale(10
-
-    ))
-    CanvasUtils.drawFigure(canvas, alignedHouse, houseColors)
+    CanvasUtils.drawLine(canvas, centerOfCoords, vectorAlignedWithX);
+    CanvasUtils.drawFigure(canvas, alignedHouse, houseColors);
   // drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
 
   // drawFilledFigure(rotatedMatrix, houseColors);

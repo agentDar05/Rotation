@@ -22,7 +22,7 @@ export default class CanvasUtils {
         }
         return new Matrix(canvasVectors);
       }
-      static drawFigure(figure, arrayOfColors = []) {
+      static drawFigure(canvas, figure, arrayOfColors = []) {
         for (let i = 0; i < figure.length; i++) {
           const canvasVectors = CanvasUtils.toCanvasMatrix(figure[i]);
           let color = "black";

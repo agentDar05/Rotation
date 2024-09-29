@@ -12,17 +12,6 @@ const canvas = new Canvas2D(document.querySelector(".rotate-container"), {
 });
 
 
-const rotationAxis = new Vector([1, 2, 3]);
-// Put the vector on XY plane, expected: [0, 2, 3]
-let vecProjectionOnYZ = rotationAxis.projectOnYZ(Vector.YAXIS);
-// Angle between projection & XY, expected: 0.9827937
-const angleBtwVectorAndXY = -StaticMath.angleToPlaneXY(vecProjectionOnYZ);
-// Rotate vector to make it lie on XY plane, expected: [1, , 0]
-const vectorOnXY = Rotate.rotateVec(rotationAxis, angleBtwVectorAndXY, 0 ,0);
-// Align the vector with the X axis
-const angleBtwVecXYAndXZ = -StaticMath.angleToPlaneXZ(vectorOnXY);
-const vectorAlignedWithX = Rotate.rotateVec(vectorOnXY, 0, 0, angleBtwVecXYAndXZ);
-const centerOfCoords = new Vector([0, 0, 0]);
 
 const houseColors = [
   "#f4212170", // red
@@ -109,8 +98,7 @@ const house = [
   ]),
 ];
 
-let rotatedHouse = Rotate.rotateArrayOfMatrices(house, angleBtwVectorAndXY, 0, 0);
-rotatedHouse = Rotate.rotateArrayOfMatrices(rotatedHouse, 0, 0, angleBtwVecXYAndXZ);
+
 function convertMatrixToCoords(matrix) {
   const array = [];
   for (let i = 0; i < matrix.width; i++) {
@@ -118,7 +106,6 @@ function convertMatrixToCoords(matrix) {
   }
   return array;
 }
-
 /**
  *
  * @param {Matrix} figure
@@ -142,6 +129,22 @@ function moveFigure(figure, center) {
 let movedHouse = moveFigure(house, new Vector([25, 25, 25]));
 let currAngles = new Vector([0, 0, 0]);
 const speed = new Vector([1, 1, 1]);
+
+
+const rotationAxis = new Vector([1, 2, 3]);
+// Put the vector on XY plane, expected: [0, 2, 3]
+let vecProjectionOnYZ = rotationAxis.projectOnYZ(Vector.YAXIS);
+// Angle between projection & XY, expected: 0.9827937
+const angleBtwVectorAndXY = -StaticMath.angleToPlaneXY(vecProjectionOnYZ);
+// Rotate vector to make it lie on XY plane, expected: [1, , 0]
+const vectorOnXY = Rotate.rotateVec(rotationAxis, angleBtwVectorAndXY, 0 ,0);
+// Align the vector with the X axis
+const angleBtwVecXYAndXZ = -StaticMath.angleToPlaneXZ(vectorOnXY);
+const vectorAlignedWithX = Rotate.rotateVec(vectorOnXY, 0, 0, angleBtwVecXYAndXZ);
+const centerOfCoords = new Vector([0, 0, 0]);
+const alignedHouse = Rotate.rotateArrayOfMatrices(house,angleBtwVectorAndXY, 0, angleBtwVecXYAndXZ)
+let rotatedHouse = Rotate.rotateArrayOfMatrices(house, angleBtwVectorAndXY, 0, 0);
+rotatedHouse = Rotate.rotateArrayOfMatrices(rotatedHouse, 0, 0, angleBtwVecXYAndXZ);
 function drawFrame() {
   canvas.clear();
   let rotatedMatrix = Rotate.rotateArrayOfMatrices(
@@ -177,6 +180,7 @@ function drawFrame() {
     CanvasUtils.drawLine(canvas, centerOfCoords, vectorAlignedWithX.scale(10
 
     ))
+    CanvasUtils.drawFigure(canvas, alignedHouse, houseColors)
   // drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
 
   // drawFilledFigure(rotatedMatrix, houseColors);

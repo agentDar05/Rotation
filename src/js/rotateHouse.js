@@ -11,10 +11,6 @@ const canvas = new Canvas2D(document.querySelector(".rotate-container"), {
   height: canvasHeight,
 });
 
-
-const matrix = new Matrix([new Vector([1, 2, 3]), new Vector([4, 5, 6])])
-console.log(matrix.vectorToCoords())
-
 const houseColors = [
   "#f4212170", // red
   "#f46c2170", // orange
@@ -108,6 +104,12 @@ function convertMatrixToCoords(matrix) {
   }
   return array;
 }
+
+/**
+ *
+ * @param {Matrix[]} figure
+ * @param {string[]} arrayOfColors
+ */
 function drawFilledFigure(figure, arrayOfColors = []) {
   for (let i = 0; i < figure.length; i++) {
     const canvasVectors = CanvasUtils.toCanvasMatrix(figure[i]);
@@ -115,7 +117,7 @@ function drawFilledFigure(figure, arrayOfColors = []) {
     if (arrayOfColors[i]) {
       color = "" + arrayOfColors[i];
     }
-    CanvasUtils.drawFilledRect(canvas, canvasVectors.vectorToCoords(), color);
+    canvas.drawFilledPath(canvasVectors.vectorToCoords(), color);
   }
 }
 /**
@@ -167,7 +169,7 @@ function drawFrame() {
   angle += 0.01;
   // drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
 
-  // drawFilledFigure(Rotate.rotateArrayOfMatrices(alignedHouse, 0, angle, 0), houseColors);
+  drawFilledFigure(Rotate.rotateArrayOfMatrices(alignedHouse, 0, angle, 0), houseColors);
   CanvasUtils.drawLine(canvas, centerOfCoords, rotationAxis)
   CanvasUtils.drawLine(canvas, centerOfCoords, originalVector)
   currAngles = currAngles.add(speed);

@@ -51,33 +51,16 @@ export default class CanvasUtils {
             CanvasUtils.drawRect(canvas, canvasFigure, color);
         }
     }
-      static drawFilledRect(canvas, matrix, color) {
-        const coords = CanvasUtils.toCanvasMatrix(matrix);
-        canvas.drawFilledArrayOfMatrices(coords, color)
-        canvas.drawFilledPath(coords, color);
-        
-      }
-      /**
-       * 
-       * @param {Matrix[]} arrayOfMatrices 
-       */
-      static arrayOfMatricesToCoords(arrayOfMatrices){
-        const arr = []
-        for(let i = 0; i<arrayOfMatrices.length; i++){
-          arr.push(arrayOfMatrices[i].vectorToCoords())
 
-      }
-      console.log(arr)
-      }
-      static drawLine(drawCanvas, v1, v2, color = "black") {
+    static drawLine(drawCanvas, v1, v2, color = "black") {
         drawCanvas.drawLine(
-          CanvasUtils.toCanvasVector(v1).asArray()[0],
-          CanvasUtils.toCanvasVector(v1).asArray()[1],
-          CanvasUtils.toCanvasVector(v2).asArray()[0],
-          CanvasUtils.toCanvasVector(v2).asArray()[1],
-          color
+                CanvasUtils.toCanvasVector(v1).asArray()[0],
+                CanvasUtils.toCanvasVector(v1).asArray()[1],
+                CanvasUtils.toCanvasVector(v2).asArray()[0],
+                CanvasUtils.toCanvasVector(v2).asArray()[1],
+                color
         );
-      }
+    }
 
       static toCanvasVector(vector) {
         const v = vector.asArray();

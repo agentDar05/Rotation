@@ -46,9 +46,9 @@ export default class Matrix {
   }
 
   /**
-   * @return {number[][]}
+   * @return {number[][]} each element of the outer array is a column of the matrix
    */
-  vectorToCoords() {
+  to2dArray() {
     const arr = []
     for (let i = 0; i < this.vectors.length; i++) {
       arr.push(this.vectors[i].asArray())

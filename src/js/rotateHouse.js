@@ -117,7 +117,7 @@ function drawFilledFigure(figure, arrayOfColors = []) {
     if (arrayOfColors[i]) {
       color = "" + arrayOfColors[i];
     }
-    canvas.drawFilledPath(canvasVectors.vectorToCoords(), color);
+    canvas.drawFilledPath(canvasVectors.to2dArray(), color);
   }
 }
 /**

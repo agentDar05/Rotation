@@ -113,10 +113,7 @@ function convertMatrixToCoords(matrix) {
 function drawFilledFigure(figure, arrayOfColors = []) {
   for (let i = 0; i < figure.length; i++) {
     const canvasVectors = CanvasUtils.toCanvasMatrix(figure[i]);
-    let color = "black";
-    if (arrayOfColors[i]) {
-      color = "" + arrayOfColors[i];
-    }
+    let color = arrayOfColors[i] ? arrayOfColors[i] : "black";
     canvas.drawFilledPath(canvasVectors.to2dArray(), color);
   }
 }

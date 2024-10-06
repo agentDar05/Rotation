@@ -44,6 +44,14 @@ export default class Matrix {
     }
     return new Matrix(translated);
   }
+  vectorToCoords(){
+    const arr = []
+      for(let i = 0; i<this.vectors.length; i++){
+        arr.push(this.vectors[i].asArray())
+        console.log("vector = "+this.vectors[i])
+      }
+      return arr
+  }
   /**
    *
    * @returns {Vector[]}

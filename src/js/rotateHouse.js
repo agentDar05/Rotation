@@ -12,6 +12,8 @@ const canvas = new Canvas2D(document.querySelector(".rotate-container"), {
 });
 
 
+const matrix = new Matrix([new Vector([1, 2, 3]), new Vector([4, 5, 6])])
+console.log(matrix.vectorToCoords())
 
 const houseColors = [
   "#f4212170", // red
@@ -106,6 +108,16 @@ function convertMatrixToCoords(matrix) {
   }
   return array;
 }
+function drawFilledFigure(figure, arrayOfColors = []) {
+  for (let i = 0; i < figure.length; i++) {
+    const canvasVectors = CanvasUtils.toCanvasMatrix(figure[i]);
+    let color = "black";
+    if (arrayOfColors[i]) {
+      color = "" + arrayOfColors[i];
+    }
+    CanvasUtils.drawFilledRect(canvas, canvasVectors.vectorToCoords(), color);
+  }
+}
 /**
  *
  * @param {Matrix} figure
@@ -141,6 +153,7 @@ const vectorOnXY = Rotate.rotateVec(rotationAxis, angleBtwVectorAndXY, 0 ,0);
 // Align the vector with the X axis
 const angleBtwVecXYAndXZ = -StaticMath.angleToPlaneXZ(vectorOnXY);
 const vectorAlignedWithX = Rotate.rotateVec(vectorOnXY, 0, 0, angleBtwVecXYAndXZ);
+const originalVector = Rotate.rotateVec(vectorAlignedWithX, -angleBtwVectorAndXY, 0, -angleBtwVecXYAndXZ)
 const centerOfCoords = new Vector([0, 0, 0]);
 const alignedHouse = Rotate.rotateArrayOfMatrices(house,angleBtwVectorAndXY, 0, angleBtwVecXYAndXZ)
 let rotatedHouse = Rotate.rotateArrayOfMatrices(house, angleBtwVectorAndXY, 0, 0);
@@ -154,8 +167,9 @@ function drawFrame() {
   angle += 0.01;
   // drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
 
-  // drawFilledFigure(rotatedMatrix, houseColors);
-
+  // drawFilledFigure(Rotate.rotateArrayOfMatrices(alignedHouse, 0, angle, 0), houseColors);
+  CanvasUtils.drawLine(canvas, centerOfCoords, rotationAxis)
+  CanvasUtils.drawLine(canvas, centerOfCoords, originalVector)
   currAngles = currAngles.add(speed);
 
   requestAnimationFrame(drawFrame);

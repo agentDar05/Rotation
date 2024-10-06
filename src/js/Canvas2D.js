@@ -67,7 +67,6 @@ export default class Canvas2D {
     this.context.fill();
     this.context.fillStyle = "black";
   }
-
   /**
    * x1, y1 - start point; x2, y2 - end point
    * @param x1

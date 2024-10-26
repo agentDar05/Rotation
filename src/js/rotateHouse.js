@@ -4,6 +4,7 @@ import Vector from "./Vector.js";
 import StaticMath from "./StaticMath.js";
 import CanvasUtils from "./CanvasUtils.js";
 import Rotate from "./Rotate.js";
+import AssertUtils from "./AssertUtils.js";
 const canvasHeight = 300;
 const canvasWidth = 300;
 const canvas = new Canvas2D(document.querySelector(".rotate-container"), {
@@ -17,7 +18,7 @@ const houseColors = [
   "#d0f42170", // yellow
   "#21f44470", // green
   "#21f4e070", // blue
-  "#3321f470", // dark-blue
+  "#3321f4ff", // dark-blue
   "#8121f470", // purple
   "#f4212170", // red
   "#f46c2170", // orange
@@ -96,7 +97,6 @@ const house = [
   ]),
 ];
 
-
 function convertMatrixToCoords(matrix) {
   const array = [];
   for (let i = 0; i < matrix.width; i++) {
@@ -141,34 +141,51 @@ let movedHouse = moveFigure(house, new Vector([25, 25, 25]));
 let currAngles = new Vector([0, 0, 0]);
 const speed = new Vector([1, 1, 1]);
 
-
-const rotationAxis = new Vector([1, 2, 3]).scale(10);
+const rotationAxis = new Vector([1, 2, 3]).scale(20);
 // Put the vector on XY plane, expected: [0, 2, 3]
 let vecProjectionOnYZ = rotationAxis.projectOnYZ(Vector.YAXIS);
 // Angle between projection & XY, expected: 0.9827937
 const angleBtwVectorAndXY = -StaticMath.angleToPlaneXY(vecProjectionOnYZ);
 // Rotate vector to make it lie on XY plane, expected: [1, , 0]
-const vectorOnXY = Rotate.rotateVec(rotationAxis, angleBtwVectorAndXY, 0 ,0);
+const vectorOnXY = Rotate.rotateVec(rotationAxis, angleBtwVectorAndXY, 0, 0);
 // Align the vector with the X axis
 const angleBtwVecXYAndXZ = -StaticMath.angleToPlaneXZ(vectorOnXY);
-const vectorAlignedWithX = Rotate.rotateVec(vectorOnXY, 0, 0, angleBtwVecXYAndXZ);
-const originalVector = Rotate.rotateVec(vectorAlignedWithX, -angleBtwVectorAndXY, 0, -angleBtwVecXYAndXZ)
+const rotateMatrix = Rotate.getRotationMatrix(
+  angleBtwVectorAndXY,
+  0,
+  angleBtwVecXYAndXZ
+);
+const vectorAlignedWithX = Rotate.rotateVec(
+  vectorOnXY,
+  0,
+  0,
+  angleBtwVecXYAndXZ
+);
+// const originalVector = Rotate.rotateVec(vectorAlignedWithX, -angleBtwVectorAndXY, 0, -angleBtwVecXYAndXZ)
+const originalVector = rotateMatrix.vectorMultiply(rotationAxis);
+
+
 const centerOfCoords = new Vector([0, 0, 0]);
-const alignedHouse = Rotate.rotateArrayOfMatrices(house,angleBtwVectorAndXY, 0, angleBtwVecXYAndXZ)
-let rotatedHouse = Rotate.rotateArrayOfMatrices(house, angleBtwVectorAndXY, 0, 0);
-rotatedHouse = Rotate.rotateArrayOfMatrices(rotatedHouse, 0, 0, angleBtwVecXYAndXZ);
+
 let angle = 0;
 
 function drawFrame() {
   canvas.clear();
+  // let alignedHouse = Rotate.rotateArrayOfMatrices(house, -angleBtwVectorAndXY, 0, 0)
+  // alignedHouse = Rotate.rotateArrayOfMatrices(alignedHouse, 0, 0, angleBtwVecXYAndXZ)
+  // const rotatedHouse = Rotate.rotateArrayOfMatrices(alignedHouse, angle, 0, 0)
+  // alignedHouse = Rotate.rotateArrayOfMatrices(rotatedHouse,-angleBtwVectorAndXY, 0, -angleBtwVecXYAndXZ)
+  const alignedHouse = Rotate.rotationMatrixMultiplyByArrayOfMatrices(
+    house,
+    rotateMatrix
+  );
   CanvasUtils.drawLine(canvas, centerOfCoords, vectorAlignedWithX);
-  CanvasUtils.drawFigure(canvas, Rotate.rotateArrayOfMatrices(alignedHouse, 0, angle, 0), houseColors);
+  CanvasUtils.drawFigure(canvas, alignedHouse, houseColors);
+  drawFilledFigure(alignedHouse, houseColors);
   angle += 0.01;
-  // drawLine(canvas, new Vector([100, 100, 100]), new Vector([80, 60, 40]));
 
-  drawFilledFigure(Rotate.rotateArrayOfMatrices(alignedHouse, 0, angle, 0), houseColors);
-  CanvasUtils.drawLine(canvas, centerOfCoords, rotationAxis)
-  CanvasUtils.drawLine(canvas, centerOfCoords, originalVector)
+  CanvasUtils.drawLine(canvas, centerOfCoords, rotationAxis);
+  CanvasUtils.drawLine(canvas, centerOfCoords, originalVector);
   currAngles = currAngles.add(speed);
 
   requestAnimationFrame(drawFrame);

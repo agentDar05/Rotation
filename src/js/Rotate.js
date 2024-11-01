@@ -11,19 +11,31 @@ export default class Rotate {
   static rotateVec(vector, ax, ay, az) {
     return Rotate.getRotationMatrix(ax, ay, az).vectorMultiply(vector);
   }
-/**
- * 
- * @param {Matrix[]} arrayOfMatrices 
- * @param {Matrix} rotationMatrix 
- * @returns {Matrix[]}
- */
-  static rotationMatrixMultiplyByArrayOfMatrices(arrayOfMatrices,rotationMatrix) {
+  static rotationMatrixMultiplyByVector(vector, rotationMatrix) {
+    return rotationMatrix.vectorMultiply(vector);
+  }
+  /**
+   *
+   * @param {Matrix[]} arrayOfMatrices
+   * @param {Matrix} rotationMatrix
+   * @returns {Matrix[]}
+   */
+  static rotationMatrixMultiplyByArrayOfMatrices(
+    arrayOfMatrices,
+    rotationMatrix
+  ) {
     const result = [];
     for (let m = 0; m < arrayOfMatrices.length; m++) {
       const currMatrix = arrayOfMatrices[m].transpose();
       result.push(rotationMatrix.matrixMultiply(currMatrix.transpose()));
     }
     return result;
+  }
+  static getInverseRotationMatrix(angleX, angleY, angleZ) {
+    const matrixX = StaticMath.getXMatrix(-angleX);
+    const matrixY = StaticMath.getYMatrix(-angleY);
+    const matrixZ = StaticMath.getZMatrix(-angleZ);
+    return matrixZ.matrixMultiply(matrixY.matrixMultiply(matrixX));
   }
   /**
    * @param {number} angleX

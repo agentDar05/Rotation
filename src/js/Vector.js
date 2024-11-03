@@ -123,6 +123,11 @@ export default class Vector {
     }
     return result;
   }
+
+  /**
+   * @param {Vector} v
+   * @return {Vector}
+   */
   add(v) {
     const output = [];
     const secondSummand = v.asArray();
